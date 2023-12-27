@@ -8,7 +8,7 @@ export const useAuthStore = defineStore({
         return { 
             username: localStorage.getItem('username') || null,
             token: localStorage.getItem('token') || null,
-            returnUrl: '/'
+            returnUrl: '/dashboard'
         }
     },
     actions: {
@@ -31,7 +31,7 @@ export const useAuthStore = defineStore({
                 this.username = data.username,
                 this.token = data.token,
 
-                router.push(this.returnUrl || '/');
+                router.push(this.returnUrl || '/dashboard');
             }
             else if (response.status === 401 || response.status === 403) {
                 alert("Incorrect username or password");

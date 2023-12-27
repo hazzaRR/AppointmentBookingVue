@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Index from '../views/Index.vue';
+import Dashboard from '../views/dashboard/Dashboard.vue';
 import NotFoundPage from '../views/NotFoundPage.vue';
 import { useAuthStore } from '../stores/auth';
 import { jwtDecode } from "jwt-decode";
@@ -11,6 +12,14 @@ const routes = [
     component: Index,
     meta: { 
       requiresAuth: false,
+    }
+  },
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: Dashboard,
+    meta: { 
+      requiresAuth: true,
     }
   },
   { 

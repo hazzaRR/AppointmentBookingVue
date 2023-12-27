@@ -5,7 +5,7 @@
     <router-link to="/">
                     <!-- <img class="w-auto h-6 sm:h-7" src="https://merakiui.com/images/full-logo.svg" alt=""> -->
                     <h1 class="w-auto h-6 sm:h-7 text-xl font-black">
-                        Beauty Room
+                        The Beauty Room
                     </h1>
                 </router-link>
   </div>

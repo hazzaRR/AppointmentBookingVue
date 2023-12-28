@@ -18,15 +18,9 @@ useHead({
      
     })
 
-const links = [
-{name: "Home", link: "/dashboard"},
-{name: "Treatments", link: "/dashboard/treatment"}
-]
-
 const tools = [
-{name: "Manage Posts", link: "/dashboard/manage-posts"},
-{name: "Add Post", link: "/dashboard/add-post"},
-{name: "Settings", link: "/settings"}
+{name: "Manage Treatments", link: "/dashboard/treatment"},
+{name: "Manage Clients", link: "/dashboard/client"},
 ]
 
 </script>

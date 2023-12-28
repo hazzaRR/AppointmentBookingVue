@@ -19,8 +19,8 @@ useHead({
     })
 
 const links = [
-{name: "Home", link: "/"},
-{name: "Posts", link: "/posts"}
+{name: "Home", link: "/dashboard"},
+{name: "Treatments", link: "/dashboard/treatment"}
 ]
 
 const tools = [

@@ -31,38 +31,57 @@
                         </div>
                     </div>
             </form>
+            <form method="dialog" class="modal-backdrop">
+    <button>close</button>
+  </form>
     </dialog>
+
+    
 
     <dialog id="editTreatmentModal" class="modal modal-bottom sm:modal-middle">
       <form method="dialog" class="modal-box">
-                    <div>
-                        <div class="flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
-                            </svg>
-                        </div>
-                        
-                        <div class="mt-2 text-center">
-                            <h3 class="text-lg font-medium leading-6 text-gray-800 capitalize dark:text-white" id="modal-title">Delete Treatment</h3>
-                            <h4 class="text-md font-sm leading-6 text-gray-800 capitalize dark:text-white">Treatment: {{selectedTreatment.treatmentName }}</h4>
-                            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                                Are you sure you want to delete this treatment?
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-5 sm:flex sm:items-center sm:justify-center">
-                        <div class="sm:flex sm:items-center ">
-                            <button class="w-full px-4 py-2 mt-2 text-sm font-medium tracking-wide text-gray-700 capitalize transition-colors duration-300 transform border border-gray-200 rounded-md sm:mt-0 sm:w-auto sm:mx-2 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-40">
+                    <h3 class="text-lg font-medium leading-6 text-gray-800 capitalize dark:text-white" id="modal-title">
+                        Update Treatment information
+                    </h3>
+
+                        <label for="treatment" class="text-sm text-gray-700 dark:text-gray-200">
+                            Treatment Name
+                        </label>
+
+                        <label class="block mt-3" for="treatment">
+                            <input type="text" name="treatment" id="treatment" placeholder="pedicure..." v-model="selectedTreatment.treatmentName" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+                        </label>
+
+                        <label for="price" class="text-sm text-gray-700 dark:text-gray-200">
+                            Price
+                        </label>
+
+                        <label class="block mt-3" for="price">
+                            <input type="number" name="price" id="price" placeholder="£25.00" v-model="selectedTreatment.price" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+                        </label>
+
+                        <label for="duration" class="text-sm text-gray-700 dark:text-gray-200">
+                            Duration
+                        </label>
+
+                        <label class="block mt-3" for="treatment">
+                            <input type="number" name="duration" id="duration" placeholder="30" v-model="selectedTreatment.durationMinutes" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+                        </label>
+
+
+                        <div class="mt-4 sm:flex sm:items-center sm:-mx-2">
+                            <button class="w-full px-4 py-2 text-sm font-medium tracking-wide text-gray-700 capitalize transition-colors duration-300 transform border border-gray-200 rounded-md sm:w-1/2 sm:mx-2 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-40">
                                 Cancel
                             </button>
-                            
-                            <button @click="DeleteTreatment" class="w-full px-4 py-2 mt-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md sm:w-auto sm:mt-0 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
-                                Delete
+
+                            <button @click="EditTreatment" class="w-full px-4 py-2 mt-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md sm:mt-0 sm:w-1/2 sm:mx-2 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
+                                Update
                             </button>
                         </div>
-                    </div>
-            </form>
+      </form>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
     </dialog>
     
         <section class="container px-4 mx-auto">
@@ -135,7 +154,7 @@
     
                                         <td class="px-4 py-4 text-sm whitespace-nowrap">
                                             <button
-                                                @click="EditTreatmentUrl(treatment.id)"
+                                                @click="openEditModal(treatment)"
                                                 class="px-1 py-1 text-gray-500 transition-colors duration-200 rounded-lg dark:text-gray-300 hover:bg-gray-100">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                                     class="w-6 h-6">
@@ -150,7 +169,7 @@
                                         </td>
                                         <td class="px-4 py-4 text-sm whitespace-nowrap">
                                             <button
-                                            @click="openDeleteModal(treatment.id, treatment.treatmentName)"
+                                            @click="openDeleteModal(treatment)"
                                                 class="px-1 py-1 text-gray-500 transition-colors duration-200 rounded-lg dark:text-gray-300 hover:bg-gray-100">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                                     class="w-6 h-6">
@@ -211,12 +230,13 @@
     import { ref, onMounted, computed } from "vue";
     import { fetchTreatments } from "../../composables/fetchTreatments";
     import { deleteTreatment } from "../../composables/deleteTreatment";
+    import {editTreatment} from '../../composables/editTreatment';
     import { useRouter } from 'vue-router';
     
     const router = useRouter();
     const treatments = ref([]);
     const currentPage = ref(1);
-    const selectedTreatment = ref({id: null, treatmentName: null, price: null, duration_minutes: null});
+    const selectedTreatment = ref({id: null, treatmentName: null, price: null, durationMinutes: null});
     const treatmentsPerPage = 10;
     
     const totalNumberOfPages = computed(() => {
@@ -233,9 +253,8 @@
         treatments.value = await fetchTreatments();
     });
     
-    const openDeleteModal = (id, name) => {
-        selectedTreatment.value.id = id;
-        selectedTreatment.value.treatmentName = name;
+    const openDeleteModal = (treatment) => {
+        selectedTreatment.value = treatment;
         deleteTreatmentModal.showModal();
     };
     
@@ -244,8 +263,17 @@
         treatments.value = treatments.value.filter(treatment => treatment['id'] !== selectedTreatment.value.id);
     }
     
-    const EditTreatmentUrl = (id) => {
-        router.push(`/dashboard/edit-post/${id}`);
+    // const EditTreatmentUrl = (id) => {
+    //     router.push(`/dashboard/edit-post/${id}`);
+    // }
+
+    const openEditModal = (treatment) => {
+        selectedTreatment.value = treatment;
+        editTreatmentModal.showModal();
+    };
+
+    const EditTreatment = async () => {
+        await editTreatment(selectedTreatment.value);
     }
     
     </script>

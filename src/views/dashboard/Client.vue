@@ -1,7 +1,6 @@
 <template>
-
     <div>
-    <dialog id="deleteTreatmentModal" class="modal modal-bottom sm:modal-middle">
+    <dialog id="deleteClientModal" class="modal modal-bottom sm:modal-middle">
       <form method="dialog" class="modal-box">
                     <div>
                         <div class="flex items-center justify-center">
@@ -11,10 +10,10 @@
                         </div>
                         
                         <div class="mt-2 text-center">
-                            <h3 class="text-lg font-medium leading-6 text-gray-800 capitalize dark:text-white" id="modal-title">Delete Treatment</h3>
-                            <h4 class="text-md font-sm leading-6 text-gray-800 capitalize dark:text-white">Treatment: {{selectedTreatment.treatmentName }}</h4>
+                            <h3 class="text-lg font-medium leading-6 text-gray-800 capitalize dark:text-white" id="modal-title">Delete Client</h3>
+                            <h4 class="text-md font-sm leading-6 text-gray-800 capitalize dark:text-white">Client: {{`${selectedClient.firstname} ${selectedClient.surname}` }}</h4>
                             <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                                Are you sure you want to delete this treatment?
+                                Are you sure you want to delete this client?
                             </p>
                         </div>
                     </div>
@@ -25,7 +24,7 @@
                                 Cancel
                             </button>
                             
-                            <button @click="DeleteTreatment" class="w-full px-4 py-2 mt-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md sm:w-auto sm:mt-0 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
+                            <button @click="DeleteClient" class="w-full px-4 py-2 mt-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md sm:w-auto sm:mt-0 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
                                 Delete
                             </button>
                         </div>
@@ -38,34 +37,42 @@
 
     
 
-    <dialog id="editTreatmentModal" class="modal modal-bottom sm:modal-middle">
+    <dialog id="editClientModal" class="modal modal-bottom sm:modal-middle">
       <form method="dialog" class="modal-box">
                     <h3 class="text-lg font-medium leading-6 text-gray-800 capitalize dark:text-white" id="modal-title">
-                        Update Treatment information
+                        Update Client information
                     </h3>
 
-                        <label for="treatment" class="text-sm text-gray-700 dark:text-gray-200">
-                            Treatment Name
+                        <label for="firstname" class="text-sm text-gray-700 dark:text-gray-200">
+                            Firstname
                         </label>
 
-                        <label class="block mt-3" for="treatment">
-                            <input type="text" name="treatment" id="treatment" placeholder="pedicure..." v-model="selectedTreatment.treatmentName" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+                        <label class="block mt-3" for="firstname">
+                            <input type="text" name="firstname" id="trefirstnameatment" placeholder="pedicure..." v-model="selectedClient.firstname" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
                         </label>
 
-                        <label for="price" class="text-sm text-gray-700 dark:text-gray-200">
-                            Price
+                        <label for="surname" class="text-sm text-gray-700 dark:text-gray-200">
+                            Surname
                         </label>
 
                         <label class="block mt-3" for="price">
-                            <input type="number" name="price" id="price" placeholder="£25.00" v-model="selectedTreatment.price" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+                            <input type="text" name="surname" id="surname" placeholder="£25.00" v-model="selectedClient.surname" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
                         </label>
 
-                        <label for="duration" class="text-sm text-gray-700 dark:text-gray-200">
-                            Duration
+                        <label for="email" class="text-sm text-gray-700 dark:text-gray-200">
+                            email
                         </label>
 
-                        <label class="block mt-3" for="treatment">
-                            <input type="number" name="duration" id="duration" placeholder="30" v-model="selectedTreatment.durationMinutes" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+                        <label class="block mt-3" for="email">
+                            <input type="email" name="email" id="email" placeholder="30" v-model="selectedClient.email" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+                        </label>
+
+                        <label for="telephone" class="text-sm text-gray-700 dark:text-gray-200">
+                            Telephone
+                        </label>
+
+                        <label class="block mt-3" for="telephone">
+                            <input type="number" name="telephone" id="telephone" placeholder="30" v-model="selectedClient.telephone" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
                         </label>
 
 
@@ -74,7 +81,7 @@
                                 Cancel
                             </button>
 
-                            <button @click="EditTreatment" class="w-full px-4 py-2 mt-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md sm:mt-0 sm:w-1/2 sm:mx-2 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
+                            <button @click="EditClient" class="w-full px-4 py-2 mt-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md sm:mt-0 sm:w-1/2 sm:mx-2 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
                                 Update
                             </button>
                         </div>
@@ -111,15 +118,13 @@
                                             class="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                                 <span>Name</span>
                                         </th>
-    
                                         <th scope="col"
-                                            class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                            Price
+                                            class="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                                <span>Email</span>
                                         </th>
-    
                                         <th scope="col"
-                                            class="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                            Time duration
+                                            class="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                                <span>Telephone</span>
                                         </th>
                                         <th scope="col" class="relative py-3.5 px-4">
                                             <span class="sr-only">Edit</span>
@@ -130,31 +135,32 @@
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                                    <tr v-for="treatment in displayedTreatments" :key="treatment.id">
+                                    <tr v-for="client in displayedclients" :key="client.id">
                                         <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
                                             <div>
                                                 <h2 class="font-medium text-gray-800 dark:text-white capitalize">
-                                                    {{ treatment.treatmentName }}
+                                                    {{ client.firstname }} {{ client.surname }}
                                                 </h2>
                                             </div>
                                         </td>
-                                        <td class="px-4 py-4 text-sm whitespace-nowrap">
+                                        <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
                                             <div>
-                                                <h4 class="text-gray-700 dark:text-gray-200">
-                                                    £{{ treatment.price }}
-                                                </h4>
+                                                <h2 class="font-medium text-gray-800 dark:text-white">
+                                                    {{ client.email }}
+                                                </h2>
                                             </div>
                                         </td>
-                                        <td class="px-12 py-4 text-sm font-medium whitespace-nowrap">
-                                            <div
-                                                class="inline px-3 py-1 text-sm font-normal rounded-full text-emerald-500 gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
-                                                {{ treatment.durationMinutes }} minutes
+                                        <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
+                                            <div>
+                                                <h2 class="font-medium text-gray-800 dark:text-white">
+                                                    {{ client.telephone }}
+                                                </h2>
                                             </div>
                                         </td>
     
                                         <td class="px-4 py-4 text-sm whitespace-nowrap">
                                             <button
-                                                @click="openEditModal(treatment)"
+                                                @click="openEditModal(client)"
                                                 class="px-1 py-1 text-gray-500 transition-colors duration-200 rounded-lg dark:text-gray-300 hover:bg-gray-100">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                                     class="w-6 h-6">
@@ -169,7 +175,7 @@
                                         </td>
                                         <td class="px-4 py-4 text-sm whitespace-nowrap">
                                             <button
-                                            @click="openDeleteModal(treatment)"
+                                            @click="openDeleteModal(client)"
                                                 class="px-1 py-1 text-gray-500 transition-colors duration-200 rounded-lg dark:text-gray-300 hover:bg-gray-100">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                                     class="w-6 h-6">
@@ -224,57 +230,57 @@
         </section>
     
     </div>
-    </template>
-    
-    <script setup>
-    import { ref, onMounted, computed } from "vue";
-    import { fetchTreatments } from "../../composables/fetchTreatments";
-    import { deleteTreatment } from "../../composables/deleteTreatment";
-    import {editTreatment} from '../../composables/editTreatment';
+</template>
+
+<script setup>
+
+import { ref, onMounted, computed } from "vue";
+    import { fetchClients } from "../../composables/fetchClients";
+    import { deleteClient } from "../../composables/deleteClient";
+    import {editClient} from '../../composables/editClient';
     import { useRouter } from 'vue-router';
     
     const router = useRouter();
-    const treatments = ref([]);
+    const clients = ref([]);
     const currentPage = ref(1);
-    const selectedTreatment = ref({id: null, treatmentName: null, price: null, durationMinutes: null});
-    const treatmentsPerPage = 10;
+    const selectedClient = ref({id: null, clientName: null, price: null, durationMinutes: null});
+    const clientsPerPage = 10;
     
     const totalNumberOfPages = computed(() => {
-        return Math.ceil(treatments.value.length / treatmentsPerPage);
+        return Math.ceil(clients.value.length / clientsPerPage);
     });
     
-    const displayedTreatments = computed(() => {
-        const start = (currentPage.value - 1) * treatmentsPerPage;
-          const end = start + treatmentsPerPage;
-          return treatments.value.slice(start, end);
+    const displayedclients = computed(() => {
+        const start = (currentPage.value - 1) * clientsPerPage;
+          const end = start + clientsPerPage;
+          return clients.value.slice(start, end);
     });
     
     onMounted(async () => {
-        treatments.value = await fetchTreatments();
+        clients.value = await fetchClients();
     });
     
-    const openDeleteModal = (treatment) => {
-        selectedTreatment.value = treatment;
-        deleteTreatmentModal.showModal();
+    const openDeleteModal = (client) => {
+        selectedClient.value = client;
+        deleteClientModal.showModal();
     };
     
-    const DeleteTreatment = async () => {
-        await deleteTreatment(selectedTreatment.value.id);
-        treatments.value = treatments.value.filter(treatment => treatment['id'] !== selectedTreatment.value.id);
+    const DeleteClient = async () => {
+        await deleteClient(selectedClient.value.id);
+        clients.value = clients.value.filter(client => client['id']!== selectedClient.value.id);
     }
     
-    // const EditTreatmentUrl = (id) => {
-    //     router.push(`/dashboard/edit-post/${id}`);
-    // }
-
-    const openEditModal = (treatment) => {
-        selectedTreatment.value = treatment;
-        editTreatmentModal.showModal();
+    const openEditModal = (client) => {
+        selectedClient.value = client;
+        editClientModal.showModal();
     };
 
-    const EditTreatment = async () => {
-        await editTreatment(selectedTreatment.value);
+    const EditClient = async () => {
+        await editClient(selectedClient.value);
     }
-    
-    </script>
-    
+
+</script>
+
+<style lang="scss" scoped>
+
+</style>

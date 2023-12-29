@@ -4,7 +4,7 @@
         <FullCalendar :options="mobileCalendarOptions"/>
     </div> -->
     <div class="flex items-center justify-center">
-        <div class="w-8/12 h-8/12">
+        <div class=" sm:w-10/12 sm:h-10/12 w-full h-full xl:w-8/12 xl:h-8/12 m-6">
         <FullCalendar :options="calendarOptions"/>
         </div>
     </div>

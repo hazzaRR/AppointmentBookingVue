@@ -72,7 +72,7 @@
                         </label>
 
                         <label class="block mt-3" for="telephone">
-                            <input type="number" name="telephone" id="telephone" placeholder="30" v-model="selectedClient.telephone" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+                            <input type="text" name="telephone" id="telephone" placeholder="30" v-model="selectedClient.telephone" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
                         </label>
 
 
@@ -83,6 +83,60 @@
 
                             <button @click="EditClient" class="w-full px-4 py-2 mt-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md sm:mt-0 sm:w-1/2 sm:mx-2 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
                                 Update
+                            </button>
+                        </div>
+      </form>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
+
+    <dialog id="addClientModal" class="modal modal-bottom sm:modal-middle">
+      <form method="dialog" class="modal-box">
+                    <h3 class="text-lg font-medium leading-6 text-gray-800 capitalize dark:text-white" id="modal-title">
+                        Create Client information
+                    </h3>
+
+                        <label for="firstname" class="text-sm text-gray-700 dark:text-gray-200">
+                            Firstname
+                        </label>
+
+                        <label class="block mt-3" for="firstname">
+                            <input type="text" name="firstname" id="trefirstnameatment" placeholder="John" v-model="clientDetails.firstname" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+                        </label>
+
+                        <label for="surname" class="text-sm text-gray-700 dark:text-gray-200">
+                            Surname
+                        </label>
+
+                        <label class="block mt-3" for="price">
+                            <input type="text" name="surname" id="surname" placeholder="Doe" v-model="clientDetails.surname" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+                        </label>
+
+                        <label for="email" class="text-sm text-gray-700 dark:text-gray-200">
+                            email
+                        </label>
+
+                        <label class="block mt-3" for="email">
+                            <input type="email" name="email" id="email" placeholder="example@email.com" v-model="clientDetails.email" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+                        </label>
+
+                        <label for="telephone" class="text-sm text-gray-700 dark:text-gray-200">
+                            Telephone
+                        </label>
+
+                        <label class="block mt-3" for="telephone">
+                            <input type="text" name="telephone" id="telephone" placeholder="07777777777" v-model="clientDetails.telephone" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+                        </label>
+
+
+                        <div class="mt-4 sm:flex sm:items-center sm:-mx-2">
+                            <button class="w-full px-4 py-2 text-sm font-medium tracking-wide text-gray-700 capitalize transition-colors duration-300 transform border border-gray-200 rounded-md sm:w-1/2 sm:mx-2 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-40">
+                                Cancel
+                            </button>
+
+                            <button @click="AddClient" class="w-full px-4 py-2 mt-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md sm:mt-0 sm:w-1/2 sm:mx-2 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
+                                Create
                             </button>
                         </div>
       </form>
@@ -105,6 +159,15 @@
                     <input type="text" placeholder="Search"
                         class="block w-full py-1.5 pr-5 text-gray-700 bg-white border border-gray-200 rounded-lg md:w-80 placeholder-gray-400/70 pl-11 rtl:pr-11 rtl:pl-5 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" />
                 </div>
+                <div class="flex items-center mt-4 gap-x-3">
+                    <button @click="openAddModal" class="flex items-center justify-center w-1/2 px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-blue-500 rounded-lg shrink-0 sm:w-auto gap-x-2 hover:bg-blue-600 dark:hover:bg-blue-500 dark:bg-blue-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+
+                        <span>Add Client</span>
+                    </button>
+        </div>
             </div>
     
             <div class="flex flex-col mt-6">
@@ -238,12 +301,13 @@ import { ref, onMounted, computed } from "vue";
     import { fetchClients } from "../../composables/fetchClients";
     import { deleteClient } from "../../composables/deleteClient";
     import {editClient} from '../../composables/editClient';
+    import {createClient} from '../../composables/createClient';
     import { useRouter } from 'vue-router';
     
-    const router = useRouter();
     const clients = ref([]);
     const currentPage = ref(1);
-    const selectedClient = ref({id: null, clientName: null, price: null, durationMinutes: null});
+    const selectedClient = ref({id: null, firstname: null, surname: null, email: null, telephone: null});
+    const clientDetails = ref({id: null, firstname: null, surname: null, email: null, telephone: null});
     const clientsPerPage = 10;
     
     const totalNumberOfPages = computed(() => {
@@ -275,9 +339,19 @@ import { ref, onMounted, computed } from "vue";
         editClientModal.showModal();
     };
 
+    const openAddModal = () => {
+        addClientModal.showModal();
+    };
+
     const EditClient = async () => {
         await editClient(selectedClient.value);
     }
+
+    const AddClient = async () => {
+        await createClient(clientDetails.value);
+        clients.value = await fetchClients();
+    }
+
 
 </script>
 

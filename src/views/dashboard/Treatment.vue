@@ -83,6 +83,51 @@
             <button>close</button>
         </form>
     </dialog>
+
+    <dialog id="addTreatmentModal" class="modal modal-bottom sm:modal-middle">
+      <form method="dialog" class="modal-box">
+                    <h3 class="text-lg font-medium leading-6 text-gray-800 capitalize dark:text-white" id="modal-title">
+                        Create Treatment
+                    </h3>
+
+                        <label for="name" class="text-sm text-gray-700 dark:text-gray-200">
+                            Name
+                        </label>
+
+                        <label class="block mt-3" for="name">
+                            <input type="text" name="name" id="name" placeholder="Pedicure" v-model="treatmentDetails.treatmentName" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+                        </label>
+
+                        <label for="price" class="text-sm text-gray-700 dark:text-gray-200">
+                            Price
+                        </label>
+
+                        <label class="block mt-3" for="price">
+                            <input type="number" name="price" id="price" step="any" min="0" placeholder="£30.50" v-model="treatmentDetails.price" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+                        </label>
+
+                        <label for="duration" class="text-sm text-gray-700 dark:text-gray-200">
+                            Duration
+                        </label>
+
+                        <label class="block mt-3" for="duration">
+                            <input type="number" name="duration" id="duration" placeholder="30" v-model="treatmentDetails.durationMinutes" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+                        </label>
+
+                        <div class="mt-4 sm:flex sm:items-center sm:-mx-2">
+                            <button class="w-full px-4 py-2 text-sm font-medium tracking-wide text-gray-700 capitalize transition-colors duration-300 transform border border-gray-200 rounded-md sm:w-1/2 sm:mx-2 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-40">
+                                Cancel
+                            </button>
+
+                            <button @click="AddTreatment" class="w-full px-4 py-2 mt-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md sm:mt-0 sm:w-1/2 sm:mx-2 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
+                                Create
+                            </button>
+                        </div>
+      </form>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
     
         <section class="container px-4 mx-auto w-full lg:w-3/4">
             <div class="mt-6 md:flex md:items-center md:justify-between">
@@ -99,7 +144,7 @@
                         class="block w-full py-1.5 pr-5 text-gray-700 bg-white border border-gray-200 rounded-lg md:w-80 placeholder-gray-400/70 pl-11 rtl:pr-11 rtl:pl-5 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" />
                 </div>
                 <div class="flex items-center mt-4 gap-x-3">
-                    <button class="flex items-center justify-center w-1/2 px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-blue-500 rounded-lg shrink-0 sm:w-auto gap-x-2 hover:bg-blue-600 dark:hover:bg-blue-500 dark:bg-blue-600">
+                    <button @click="openAddModal" class="flex items-center justify-center w-1/2 px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-blue-500 rounded-lg shrink-0 sm:w-auto gap-x-2 hover:bg-blue-600 dark:hover:bg-blue-500 dark:bg-blue-600">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
@@ -240,12 +285,14 @@
     import { fetchTreatments } from "../../composables/fetchTreatments";
     import { deleteTreatment } from "../../composables/deleteTreatment";
     import {editTreatment} from '../../composables/editTreatment';
+    import {createTreatment} from '../../composables/createTreatment';
     import { useRouter } from 'vue-router';
     
     const router = useRouter();
     const treatments = ref([]);
     const currentPage = ref(1);
     const selectedTreatment = ref({id: null, treatmentName: null, price: null, durationMinutes: null});
+    const treatmentDetails = ref({treatmentName: null, price: null, durationMinutes: null});
     const treatmentsPerPage = 10;
     
     const totalNumberOfPages = computed(() => {
@@ -283,6 +330,15 @@
 
     const EditTreatment = async () => {
         await editTreatment(selectedTreatment.value);
+    }
+
+    const openAddModal = () => {
+        addTreatmentModal.showModal();
+    };
+
+    const AddTreatment = async () => {
+        await createTreatment(treatmentDetails.value);
+        treatments.value = await fetchTreatments();
     }
     
     </script>

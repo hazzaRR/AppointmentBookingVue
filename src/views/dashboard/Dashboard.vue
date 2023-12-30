@@ -22,12 +22,14 @@
                             <input type="time" name="startTime" id="startTime" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
                         </label>
 
-                        <label for="duration" class="text-sm text-gray-700 dark:text-gray-200">
-                            Duration
+                        <label for="client" class="text-sm text-gray-700 dark:text-gray-200">
+                            Client
                         </label>
 
                         <label class="block mt-3" for="duration">
-                            <input type="number" name="duration" id="duration" placeholder="30" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+                            <select v-model="selectedClient" id="duration" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300">
+                                <option v-for="client in clients" :key="client.id" :value="client" >{{ client.firstname }} {{ client.surname }}</option>
+                            </select>
                         </label>
 
                         
@@ -82,10 +84,13 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import Calendar from '../../components/Calendar.vue';
 import {fetchAppointments} from '../../composables/fetchAppointments';
+import {fetchClients} from '../../composables/fetchClients';
 
 const appointments = ref(null);
 const events = ref([]);
+const clients = ref([]);
 const selectedEventId = ref(null);
+const selectedClient = ref(null);
 
 const calendarOptions = ref({
     plugins: [ dayGridPlugin, interactionPlugin, timeGridPlugin ],
@@ -133,7 +138,8 @@ onMounted(async () => {
 
 });
 
-const openAddModal = () => {
+const openAddModal = async () => {
+    clients.value = await fetchClients();
         addAppointmentModal.showModal();
     };
 

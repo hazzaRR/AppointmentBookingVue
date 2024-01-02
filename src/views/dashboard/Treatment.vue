@@ -286,9 +286,7 @@
     import { deleteTreatment } from "../../composables/deleteTreatment";
     import {editTreatment} from '../../composables/editTreatment';
     import {createTreatment} from '../../composables/createTreatment';
-    import { useRouter } from 'vue-router';
     
-    const router = useRouter();
     const treatments = ref([]);
     const currentPage = ref(1);
     const selectedTreatment = ref({id: null, treatmentName: null, price: null, durationMinutes: null});

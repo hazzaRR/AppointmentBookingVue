@@ -1,7 +1,10 @@
 <template>
+<!-- <TreatmentSelector :selectedTreatments="selectedTreatments" @update:selectedTreatments="selectedTreatments = $event" /> -->
+
+<p>{{ selectedTreatments }}</p>
 
 <dialog id="addAppointmentModal" class="modal modal-bottom sm:modal-middle">
-      <form method="dialog" class="modal-box">
+      <form v-if="modalDisplay === 'formDisplay'" method="dialog" class="modal-box">
                     <h3 class="text-lg font-medium leading-6 text-gray-800 capitalize dark:text-white" id="modal-title">
                         Create Appointment
                     </h3>
@@ -11,7 +14,7 @@
                         </label>
 
                         <label class="block mt-3" for="name">
-                            <input type="date" name="name" id="name" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+                            <input v-model="createAppointmentDetails.appDate" type="date" name="name" id="name" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
                         </label>
 
                         <label for="startTime" class="text-sm text-gray-700 dark:text-gray-200">
@@ -19,7 +22,7 @@
                         </label>
 
                         <label class="block mt-3" for="startTime">
-                            <input type="time" name="startTime" id="startTime" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+                            <input v-model="createAppointmentDetails.startTime" type="time" name="startTime" id="startTime" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
                         </label>
 
                         <label for="client" class="text-sm text-gray-700 dark:text-gray-200">
@@ -27,18 +30,42 @@
                         </label>
 
                         <label class="block mt-3" for="duration">
-                            <select v-model="selectedClient" id="duration" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300">
+                            <select v-model="createAppointmentDetails.client" id="duration" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300">
                                 <option v-for="client in clients" :key="client.id" :value="client" >{{ client.firstname }} {{ client.surname }}</option>
                             </select>
                         </label>
 
+                        <label for="treatments" class="text-sm text-gray-700 dark:text-gray-200">
+                            Treatments
+                        </label>
+
+                        <label class="block mt-3" for="startTime">
+                            <p class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300">{{ selectedTreatments.map(treatment => treatment.treatmentName).join(', ') }}</p>
+                        </label>
+
+                    <div class="flex items-center my-4 gap-x-3 justify-start">
+                    <a @click="switchDisplay('treatmentsDisplay')" class="flex items-center justify-center w-1/2 px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-blue-500 rounded-lg shrink-0 sm:w-auto gap-x-2 hover:bg-blue-600 dark:hover:bg-blue-500 dark:bg-blue-600">
+                        <span>Select Treatments</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                        </svg>    
+                    </a>
+                    </div>
                         
                         <label for="endTime" class="text-sm text-gray-700 dark:text-gray-200">
                             End Time
                         </label>
 
                         <label class="block mt-3" for="endTime">
-                            <input type="time" name="endTime" id="endTime" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+                            <input v-model="createAppointmentDetails.endTime" type="time" name="endTime" id="endTime" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+                        </label>
+
+                        <label for="totalPrice" class="text-sm text-gray-700 dark:text-gray-200">
+                            Total
+                        </label>
+
+                        <label class="block mt-3" for="totalPrice">
+                            <input v-model="createAppointmentDetails.totalPrice" type="number" step="any" name="totalPrice" id="totalPrice" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
                         </label>
 
                         <div class="mt-4 sm:flex sm:items-center sm:-mx-2">
@@ -51,6 +78,7 @@
                             </button>
                         </div>
         </form>
+        <TreatmentSelector class="modal-box" v-else-if="modalDisplay === 'treatmentsDisplay'" :selectedTreatments="selectedTreatments" @update:selectedTreatments="selectedTreatments = $event" @confirmSelection="switchDisplay('formDisplay')" />
         <form method="dialog" class="modal-backdrop">
             <button>close</button>
         </form>
@@ -69,7 +97,7 @@
     
                         <span>Add Appointment</span>
                     </button>
-                </div>
+            </div>
         <FullCalendar :options="calendarOptions"/>
         </div>
     </div>
@@ -77,12 +105,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import Calendar from '../../components/Calendar.vue';
+import TreatmentSelector from '../../components/TreatmentSelector.vue';
 import {fetchAppointments} from '../../composables/fetchAppointments';
 import {fetchClients} from '../../composables/fetchClients';
 
@@ -90,7 +118,44 @@ const appointments = ref(null);
 const events = ref([]);
 const clients = ref([]);
 const selectedEventId = ref(null);
-const selectedClient = ref(null);
+const selectedTreatments = ref([]);
+const createAppointmentDetails = ref({
+    appDate: null,
+    startTime: null,
+    endTime: null,
+    client: null,
+    totalPrice: 0
+
+})
+
+
+const modalDisplay = ref('formDisplay'); // Initial display is the form
+
+const switchDisplay = (display) => {
+  modalDisplay.value = display;
+};
+
+
+
+watch(selectedTreatments, () => {
+    console.log("Treatments changed");
+    let minutes = 0
+    let totalPrice = 0
+    
+    selectedTreatments.value.forEach((selected) => {
+        minutes = minutes + selected.durationMinutes;
+        totalPrice = totalPrice + selected.price;
+    });
+
+
+    createAppointmentDetails.value.totalPrice = totalPrice;
+
+
+},
+  {
+    deep: true,
+  }
+  )
 
 const calendarOptions = ref({
     plugins: [ dayGridPlugin, interactionPlugin, timeGridPlugin ],

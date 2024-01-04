@@ -76,7 +76,7 @@
                             </button>
                         </div>
         </form>
-        <TreatmentSelector class="modal-box" v-else-if="editModalDisplay === 'treatmentsDisplay'" :selectedTreatments="appointment.treatments" @update:selectedTreatments="appointment.treatments = $event" @confirmSelection="switchDisplay('editDisplay')" />
+        <TreatmentSelector v-else-if="editModalDisplay === 'treatmentsDisplay'" :selectedTreatments="appointment.treatments" @update:selectedTreatments="appointment.treatments = $event" @confirmSelection="switchDisplay('editDisplay')" />
 
     </div>
 </template>

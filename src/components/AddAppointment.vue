@@ -1,6 +1,6 @@
 <template>
-<dialog id="addAppointmentModal" class="modal modal-bottom sm:modal-middle">
-      <!-- <form v-if="modalDisplay === 'formDisplay'" method="dialog" class="modal-box">
+    <div>
+        <form v-if="addModalDisplay === 'addDisplay'" method="dialog">
                     <h3 class="text-lg font-medium leading-6 text-gray-800 capitalize dark:text-white" id="modal-title">
                         Create Appointment
                     </h3>
@@ -26,7 +26,7 @@
 
                         <label class="block mt-3" for="duration">
                             <select v-model="createAppointmentDetails.client" id="duration" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300">
-                                <option v-for="client in clients" :key="client.id" :value="client" >{{ client.firstname }} {{ client.surname }}</option>
+                                <option v-for="client in props.clients" :key="client.id" :value="client" >{{ client.firstname }} {{ client.surname }}</option>
                             </select>
                         </label>
 
@@ -72,107 +72,61 @@
                                 Create
                             </button>
                         </div>
-        </form> -->
-        <AddAppointment class="modal-box" v-if="modalDisplay === 'addFormDisplay'" :clients="clients" />
-        <!-- <TreatmentSelector class="modal-box" v-else-if="modalDisplay === 'treatmentsDisplay'" :selectedTreatments="selectedTreatments" @update:selectedTreatments="selectedTreatments = $event" @confirmSelection="switchDisplay('formDisplay')" /> -->
-        <EditAppointment class="modal-box" v-else-if="modalDisplay === 'editFormDisplay'" :appointmentDetails="selectedAppointment"/>
-        <form method="dialog" class="modal-backdrop">
-            <button>close</button>
         </form>
-    </dialog>
+        <TreatmentSelector v-else-if="addModalDisplay === 'treatmentsDisplay'" :selectedTreatments="selectedTreatments" @update:selectedTreatments="selectedTreatments = $event" @confirmSelection="switchDisplay('addDisplay')" />
 
-    <!-- <div v-if="isMobile" class="w-full h-full">
-        <FullCalendar :options="mobileCalendarOptions"/>
-    </div> -->
-    <div class="flex items-center justify-center">
-      <div class=" sm:w-10/12 sm:h-10/12 w-full h-full xl:w-8/12 xl:h-8/12 m-6">
-          <div class="flex items-center my-4 gap-x-3 justify-end">
-                    <button @click="openAddModal" class="flex items-center justify-center w-1/2 px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-blue-500 rounded-lg shrink-0 sm:w-auto gap-x-2 hover:bg-blue-600 dark:hover:bg-blue-500 dark:bg-blue-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-    
-                        <span>Add Appointment</span>
-                    </button>
-            </div>
-        <FullCalendar :options="calendarOptions"/>
-        </div>
     </div>
-    
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import FullCalendar from '@fullcalendar/vue3'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import timeGridPlugin from '@fullcalendar/timegrid'
-import interactionPlugin from '@fullcalendar/interaction'
-import EditAppointment from '../../components/EditAppointment.vue';
-import AddAppointment from '../../components/AddAppointment.vue';
-import {fetchAppointments} from '../../composables/fetchAppointments';
-import {fetchClients} from '../../composables/fetchClients';
 
-const appointments = ref(null);
-const events = ref([]);
-const clients = ref([]);
-const selectedAppointment = ref(null);
+import {ref, watch, watchEffect} from 'vue';
+import TreatmentSelector from './TreatmentSelector.vue';
+import { createAppointment } from '../composables/createAppointment';
 
-const modalDisplay = ref('addFormDisplay');
-
-const switchDisplay = (display) => {
-  modalDisplay.value = display;
-};
+const props = defineProps(['clients'])
 
 
 
-const calendarOptions = ref({
-    plugins: [ dayGridPlugin, interactionPlugin, timeGridPlugin ],
-    initialView: 'timeGridWeek',
-      firstDay: 1,
-      slotMinTime: '07:00',
-      slotMaxTime: '21:00',
-      slotDuration: '00:15',
-      nowIndicator: true,
-      headerToolbar: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'dayGridMonth,timeGridWeek,timeGridDay'
-      },
-      events: events.value,
-      eventTimeFormat: {
-        hour: 'numeric',
-        minute: '2-digit',
-        meridiem: 'short'
-      },
-      //opens modal with the selected appointment details
-      eventClick: function(info) {
-        selectedAppointment.value = appointments.value.filter(appointment => String(appointment['id']) === String(info.event.id))[0]
-        console.log(selectedAppointment.value)
-        switchDisplay('editFormDisplay');
-        addAppointmentModal.showModal();
-      }
-});
+const addModalDisplay = ref('addDisplay');
+const selectedTreatments = ref([]);
+const createAppointmentDetails = ref({appDate: null,startTime: null,endTime: null,client: null,totalPrice: 0,treatments: []});
 
-onMounted(async () => {
-  appointments.value = await fetchAppointments();
+const handleTreatmentChange = () => {
+    let addedMinutes = 0
+    let totalPrice = 0
+    
+    selectedTreatments.value.forEach((selected) => {
+        addedMinutes = addedMinutes + selected.durationMinutes;
+        totalPrice = totalPrice + selected.price;
+    });
 
-  for (let i = 0; i < appointments.value.length; i++) {
+    const originalDateTime = new Date(`2000-01-01T${createAppointmentDetails.value.startTime}`);
+    const newDateTime = new Date(originalDateTime.getTime() + addedMinutes * 60000); // 60000 milliseconds in a minute
 
-  events.value.push({
-    id: appointments.value[i].id,
-    title: `${appointments.value[i].client.firstname} ${appointments.value[i].client.surname}`,
-    start: `${appointments.value[i].appDate}T${appointments.value[i].startTime}`,
-    end: `${appointments.value[i].appDate}T${appointments.value[i].endTime}`
-  });
+    const newHours = String(newDateTime.getHours()).padStart(2, '0');
+    const newMinutes = String(newDateTime.getMinutes()).padStart(2, '0');
 
+    console.log(newDateTime)
+
+    createAppointmentDetails.value.endTime = `${newHours}:${newMinutes}`;
+    createAppointmentDetails.value.totalPrice = totalPrice;
 }
 
-});
 
-const openAddModal = async () => {
-    clients.value = await fetchClients();
-    switchDisplay('addFormDisplay');
-    addAppointmentModal.showModal();
+
+// watch(selectedTreatments, handleTreatmentChange,{ deep: true})
+watchEffect(() => handleTreatmentChange());
+
+
+const switchDisplay = (display) => {
+    addModalDisplay.value = display;
+};
+
+const addAppointment = async () => {
+    createAppointmentDetails.value.treatments = selectedTreatments.value;
+    await createAppointment(createAppointmentDetails.value);
+    createAppointmentDetails.value = {appDate: null,startTime: null,endTime: null,client: null,totalPrice: 0,treatments: []};
 };
 
 </script>

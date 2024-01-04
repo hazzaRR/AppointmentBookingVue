@@ -43,7 +43,7 @@
                             <p class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300">{{ selectedTreatments.map(treatment => treatment.treatmentName).join(', ') }}</p>
                         </label>
 
-                    <div class="flex items-center my-4 gap-x-3 justify-start">
+                    <div class="flex items-center my-4 gap-x-3 justify-end">
                     <a @click="switchDisplay('treatmentsDisplay')" class="flex items-center justify-center w-1/2 px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-blue-500 rounded-lg shrink-0 sm:w-auto gap-x-2 hover:bg-blue-600 dark:hover:bg-blue-500 dark:bg-blue-600">
                         <span>Select Treatments</span>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -73,7 +73,7 @@
                                 Cancel
                             </button>
 
-                            <button class="w-full px-4 py-2 mt-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md sm:mt-0 sm:w-1/2 sm:mx-2 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
+                            <button @click="addAppointment" class="w-full px-4 py-2 mt-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md sm:mt-0 sm:w-1/2 sm:mx-2 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
                                 Create
                             </button>
                         </div>
@@ -113,6 +113,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 import TreatmentSelector from '../../components/TreatmentSelector.vue';
 import {fetchAppointments} from '../../composables/fetchAppointments';
 import {fetchClients} from '../../composables/fetchClients';
+import {createAppointment} from '../../composables/createAppointment';
 
 const appointments = ref(null);
 const events = ref([]);
@@ -124,8 +125,8 @@ const createAppointmentDetails = ref({
     startTime: null,
     endTime: null,
     client: null,
-    totalPrice: 0
-
+    totalPrice: 0,
+    treatments: []
 })
 
 
@@ -204,8 +205,13 @@ onMounted(async () => {
 
 const openAddModal = async () => {
     clients.value = await fetchClients();
-        addAppointmentModal.showModal();
-    };
+    addAppointmentModal.showModal();
+};
+
+const addAppointment = async () => {
+    createAppointmentDetails.value.treatments = selectedTreatments.value;
+    await createAppointment(createAppointmentDetails.value);
+};
 
 </script>
 

@@ -43,10 +43,6 @@ const availableTreatments = ref([]);
 
 const isEmpty = computed(() => availableTreatments.value.length === 0);
 
-// Watch for changes in the parent component's selectedTreatments prop
-// watch(() => props.selectedTreatments, (newSelectedTreatments) => {
-//   selectedTreatments.value = newSelectedTreatments;
-// }, {deep: true});
 
 onMounted(async () => {
     availableTreatments.value = await fetchTreatments();
@@ -56,17 +52,14 @@ const selectTreatment = (selectedTreatment) => {
     const treatmentIndex = props.selectedTreatments.findIndex(treatment => treatment.id === selectedTreatment.id);
 
     if (treatmentIndex !== -1) {
-        // Treatment is already selected, remove it
         props.selectedTreatments.splice(treatmentIndex, 1);
     } else {
-        // Treatment is not selected, add it
+
         props.selectedTreatments.push(selectedTreatment);
     }
 };
 
 const isSelected = (id) => {
-    // console.log(selectedTreatments.value)
-
     console.log( props.selectedTreatments.findIndex((selected) =>  String(selected.id) === String(id)))
     return (
         props.selectedTreatments.findIndex(

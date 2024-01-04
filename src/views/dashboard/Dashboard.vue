@@ -105,7 +105,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, watchEffect } from 'vue';
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -136,26 +136,29 @@ const switchDisplay = (display) => {
 };
 
 
-
-watch(selectedTreatments, () => {
-    console.log("Treatments changed");
-    let minutes = 0
+const handleTreatmentChange = () => {
+    let addedMinutes = 0
     let totalPrice = 0
     
     selectedTreatments.value.forEach((selected) => {
-        minutes = minutes + selected.durationMinutes;
+        addedMinutes = addedMinutes + selected.durationMinutes;
         totalPrice = totalPrice + selected.price;
     });
 
+    const originalDateTime = new Date(`2000-01-01T${createAppointmentDetails.value.startTime}`);
+    const newDateTime = new Date(originalDateTime.getTime() + addedMinutes * 60000); // 60000 milliseconds in a minute
 
+    const newHours = String(newDateTime.getHours()).padStart(2, '0');
+    const newMinutes = String(newDateTime.getMinutes()).padStart(2, '0');
+
+    createAppointmentDetails.value.endTime = `${newHours}:${newMinutes}`;
     createAppointmentDetails.value.totalPrice = totalPrice;
+}
 
 
-},
-  {
-    deep: true,
-  }
-  )
+
+watch(selectedTreatments, handleTreatmentChange,{ deep: true})
+watchEffect(() => handleTreatmentChange());
 
 const calendarOptions = ref({
     plugins: [ dayGridPlugin, interactionPlugin, timeGridPlugin ],
@@ -180,10 +183,6 @@ const calendarOptions = ref({
       eventClick: function(info) {
 
         selectedEventId.value = info.event.id;
-
-        // editBookingDetails.showModal();
-
-        // navigateTo(`/employee/manageBookings/${info.event.id}`);
       }
 });
 

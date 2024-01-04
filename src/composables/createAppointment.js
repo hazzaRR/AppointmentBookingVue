@@ -15,8 +15,8 @@ export const createAppointment = async (appointmentDetails) => {
     
     if (response.status === 200) {
 
-        console.log("Appointment successfully created");
         alert("Appointment successfully created");
+        location.reload();
     }
 
     else if (response.status === 401) {

@@ -1,14 +1,9 @@
 <template>
-<!-- <TreatmentSelector :selectedTreatments="selectedTreatments" @update:selectedTreatments="selectedTreatments = $event" /> -->
-
-<p>{{ selectedTreatments }}</p>
-
 <dialog id="addAppointmentModal" class="modal modal-bottom sm:modal-middle">
       <form v-if="modalDisplay === 'formDisplay'" method="dialog" class="modal-box">
                     <h3 class="text-lg font-medium leading-6 text-gray-800 capitalize dark:text-white" id="modal-title">
                         Create Appointment
                     </h3>
-
                         <label for="name" class="text-sm text-gray-700 dark:text-gray-200">
                             Date
                         </label>
@@ -79,6 +74,7 @@
                         </div>
         </form>
         <TreatmentSelector class="modal-box" v-else-if="modalDisplay === 'treatmentsDisplay'" :selectedTreatments="selectedTreatments" @update:selectedTreatments="selectedTreatments = $event" @confirmSelection="switchDisplay('formDisplay')" />
+        <EditAppointment class="modal-box" v-else-if="modalDisplay === 'editDisplay'" :appointmentDetails="selectedAppointment"/>
         <form method="dialog" class="modal-backdrop">
             <button>close</button>
         </form>
@@ -111,6 +107,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import TreatmentSelector from '../../components/TreatmentSelector.vue';
+import EditAppointment from '../../components/EditAppointment.vue';
 import {fetchAppointments} from '../../composables/fetchAppointments';
 import {fetchClients} from '../../composables/fetchClients';
 import {createAppointment} from '../../composables/createAppointment';
@@ -118,7 +115,7 @@ import {createAppointment} from '../../composables/createAppointment';
 const appointments = ref(null);
 const events = ref([]);
 const clients = ref([]);
-const selectedEventId = ref(null);
+const selectedAppointment = ref(null);
 const selectedTreatments = ref([]);
 const createAppointmentDetails = ref({
     appDate: null,
@@ -182,8 +179,10 @@ const calendarOptions = ref({
       },
       //redirects the page to show the details of the appointment you have selected
       eventClick: function(info) {
-
-        selectedEventId.value = info.event.id;
+        selectedAppointment.value = appointments.value.filter(appointment => String(appointment['id']) === String(info.event.id))[0]
+        console.log(selectedAppointment.value)
+        switchDisplay('editDisplay');
+        addAppointmentModal.showModal();
       }
 });
 
@@ -205,12 +204,14 @@ onMounted(async () => {
 
 const openAddModal = async () => {
     clients.value = await fetchClients();
+    switchDisplay('formDisplay');
     addAppointmentModal.showModal();
 };
 
 const addAppointment = async () => {
     createAppointmentDetails.value.treatments = selectedTreatments.value;
     await createAppointment(createAppointmentDetails.value);
+    appointments.value = await fetchAppointments();
 };
 
 </script>

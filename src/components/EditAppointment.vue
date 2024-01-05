@@ -63,33 +63,64 @@
                             <input v-model="appointment.totalPrice" type="number" step="any" name="totalPrice" id="totalPrice" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
                         </label>
 
+                        <label for="status" class="text-sm text-gray-700 dark:text-gray-200">
+                            Status
+                        </label>
+
+                        <label class="block mt-3" for="duration">
+                            <select v-model="appointment.status" id="status" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300 capitalize">
+                                <option class="capitalize" v-for="status in statuses" :key="status" :value="status" >{{ status }}</option>
+                            </select>
+                        </label>
+
+                        <label for="status" class="text-sm text-gray-700 dark:text-gray-200">
+                            Payment Type
+                        </label>
+
+                        <label class="block mt-3" for="duration">
+                            <select :disabled="isPaymentTypeDisabled" v-model="appointment.paymentType" id="status" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300 capitalize">
+                                <option class="capitalize" v-for="paymentType in paymentTypes" :key="paymentType" :value="paymentType" >{{ paymentType }}</option>
+                            </select>
+                        </label>
+
                         <div class="mt-4 sm:flex sm:items-center sm:-mx-2">
                             <button class="w-full px-4 py-2 text-sm font-medium tracking-wide text-gray-700 capitalize transition-colors duration-300 transform border border-gray-200 rounded-md sm:w-1/2 sm:mx-2 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-40">
-                                Cancel
+                                Back
                             </button>
 
                             <button  class="w-full px-4 py-2 mt-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md sm:mt-0 sm:w-1/2 sm:mx-2 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
-                                Create
+                                Update
                             </button>
-                            <button class="w-full px-4 py-2 mt-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md sm:mt-0 sm:w-1/2 sm:mx-2 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
+                            <!-- <button class="w-full px-4 py-2 mt-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md sm:mt-0 sm:w-1/2 sm:mx-2 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
                                 Delete
-                            </button>
+                            </button> -->
                         </div>
         </form>
-        <TreatmentSelector v-else-if="editModalDisplay === 'treatmentsDisplay'" :selectedTreatments="appointment.treatments" @update:selectedTreatments="appointment.treatments = $event" @confirmSelection="switchDisplay('editDisplay')" />
+        <TreatmentSelector v-else-if="editModalDisplay === 'treatmentsDisplay'" :selectedTreatments="appointment.treatments" @update:selectedTreatments="appointment.treatments = $event " @confirmSelection="switchDisplay('editDisplay')"/>
 
-    </div>
+        </div>
 </template>
 
 <script setup>
 
-import {onMounted, ref} from 'vue';
+import {onMounted, ref, watch, computed} from 'vue';
 import TreatmentSelector from './TreatmentSelector.vue';
 
 
 const props = defineProps(['appointmentDetails']);
 const appointment = ref(null);
 const editModalDisplay = ref('editDisplay');
+
+
+const statuses = ["upcoming", "completed", "cancelled"];
+const paymentTypes = ["cash", "card", "voucher"];
+
+const isPaymentTypeDisabled = computed(() => appointment.value.status !== 'completed');
+
+watch(() => props.appointmentDetails, (newAppointmentDetails, oldAppointmentDetails) => {
+    console.log('Appointment details changed:', newAppointmentDetails, oldAppointmentDetails);
+    appointment.value = newAppointmentDetails;
+});
 
 
 const switchDisplay = (display) => {

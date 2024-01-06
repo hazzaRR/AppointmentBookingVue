@@ -86,15 +86,21 @@ const calendarOptions = ref({
         switchDisplay('editFormDisplay');
         addAppointmentModal.showModal();
       },
-      eventRender: function (info) {
+      eventDidMount: function (info) {
+        console.log(info.event)
       const eventStatus = info.event.extendedProps.status;
         if (eventStatus === 'completed') {
-            info.el.style.backgroundColor = 'green';
-            info.el.style.borderColor = 'darkgreen';
+            info.el.style.backgroundColor = '#32de84';
+            info.el.style.borderColor = '#32de84';
             info.el.style.color = 'white';
         } else if (eventStatus === 'cancelled') {
-            info.el.style.backgroundColor = 'red';
-            info.el.style.borderColor = 'darkred';
+            info.el.style.backgroundColor = '#C60C30';
+            info.el.style.borderColor = '#C60C30';
+            info.el.style.color = 'white';
+        }
+        else {
+            info.el.style.backgroundColor = '#007FFF';
+            info.el.style.borderColor = '#007FFF';
             info.el.style.color = 'white';
         }
     } 
@@ -110,7 +116,9 @@ onMounted(async () => {
     title: `${appointments.value[i].client.firstname} ${appointments.value[i].client.surname}`,
     start: `${appointments.value[i].appDate}T${appointments.value[i].startTime}`,
     end: `${appointments.value[i].appDate}T${appointments.value[i].endTime}`,
-    status: `${appointments.value[i].start}`
+    extendedProps: {
+      status: appointments.value[i].status
+    }
   });
 
 }
@@ -123,19 +131,6 @@ const openAddModal = async () => {
     addAppointmentModal.showModal();
 };
 
-const eventRender = (info) => {
-  const eventStatus = info.event.extendedProps.status;
-
-  if (eventStatus === 'completed') {
-    info.el.style.backgroundColor = 'green';
-    info.el.style.borderColor = 'darkgreen';
-    info.el.style.color = 'white';
-  } else if (eventStatus === 'cancelled') {
-    info.el.style.backgroundColor = 'red';
-    info.el.style.borderColor = 'darkred';
-    info.el.style.color = 'white';
-  }
-}
 
 </script>
 

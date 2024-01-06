@@ -1,6 +1,6 @@
 <template>
 
-    <div>
+    <div class="grow my-6">
     <dialog id="deleteTreatmentModal" class="modal modal-bottom sm:modal-middle">
       <form method="dialog" class="modal-box">
                     <div>

@@ -6,7 +6,7 @@
             <!-- <AppointmentOptions class="modal-box" v-if="modalDisplay === 'optionsDisplay'" :appointmentDetails="selectedAppointment" /> -->
             <EditAppointment class="modal-box" v-else-if="modalDisplay === 'editFormDisplay'" :appointmentDetails="selectedAppointment"/>
             <form method="dialog" class="modal-backdrop">
-                <button>close</button>
+                <button @click="switchDisplay('addFormDisplay')">close</button>
             </form>
         </dialog>
         
@@ -85,7 +85,19 @@ const calendarOptions = ref({
         console.log(selectedAppointment.value)
         switchDisplay('editFormDisplay');
         addAppointmentModal.showModal();
-      }
+      },
+      eventRender: function (info) {
+      const eventStatus = info.event.extendedProps.status;
+        if (eventStatus === 'completed') {
+            info.el.style.backgroundColor = 'green';
+            info.el.style.borderColor = 'darkgreen';
+            info.el.style.color = 'white';
+        } else if (eventStatus === 'cancelled') {
+            info.el.style.backgroundColor = 'red';
+            info.el.style.borderColor = 'darkred';
+            info.el.style.color = 'white';
+        }
+    } 
 });
 
 onMounted(async () => {
@@ -97,7 +109,8 @@ onMounted(async () => {
     id: appointments.value[i].id,
     title: `${appointments.value[i].client.firstname} ${appointments.value[i].client.surname}`,
     start: `${appointments.value[i].appDate}T${appointments.value[i].startTime}`,
-    end: `${appointments.value[i].appDate}T${appointments.value[i].endTime}`
+    end: `${appointments.value[i].appDate}T${appointments.value[i].endTime}`,
+    status: `${appointments.value[i].start}`
   });
 
 }
@@ -109,6 +122,20 @@ const openAddModal = async () => {
     switchDisplay('addFormDisplay');
     addAppointmentModal.showModal();
 };
+
+const eventRender = (info) => {
+  const eventStatus = info.event.extendedProps.status;
+
+  if (eventStatus === 'completed') {
+    info.el.style.backgroundColor = 'green';
+    info.el.style.borderColor = 'darkgreen';
+    info.el.style.color = 'white';
+  } else if (eventStatus === 'cancelled') {
+    info.el.style.backgroundColor = 'red';
+    info.el.style.borderColor = 'darkred';
+    info.el.style.color = 'white';
+  }
+}
 
 </script>
 

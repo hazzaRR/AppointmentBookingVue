@@ -1,6 +1,6 @@
 <template>
   
-<div class="bg-white dark:bg-inherit">
+<div class="bg-white dark:bg-inherit grow my-6">
     <div class="flex justify-center">
 
         <div class="flex items-center w-full max-w-md px-6 mx-auto">

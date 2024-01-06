@@ -1,6 +1,7 @@
 <template>
     <div v-if="appointment !== null">
         <form v-if="editModalDisplay === 'editDisplay'" method="dialog">
+                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                     <h3 class="text-lg font-medium leading-6 text-gray-800 capitalize dark:text-white" id="modal-title">
                         Update Appointment
                     </h3>
@@ -84,9 +85,9 @@
                         </label>
 
                         <div class="mt-4 sm:flex sm:items-center sm:-mx-2">
-                            <button class="w-full px-4 py-2 text-sm font-medium tracking-wide text-gray-700 capitalize transition-colors duration-300 transform border border-gray-200 rounded-md sm:w-1/2 sm:mx-2 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-40">
+                            <!-- <button class="w-full px-4 py-2 text-sm font-medium tracking-wide text-gray-700 capitalize transition-colors duration-300 transform border border-gray-200 rounded-md sm:w-1/2 sm:mx-2 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-40">
                                 Back
-                            </button>
+                            </button> -->
 
                             <button  class="w-full px-4 py-2 mt-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md sm:mt-0 sm:w-1/2 sm:mx-2 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
                                 Update
@@ -113,13 +114,13 @@ const editModalDisplay = ref('editDisplay');
 
 
 const statuses = ["upcoming", "completed", "cancelled"];
-const paymentTypes = ["cash", "card", "voucher"];
+const paymentTypes = [null, "cash", "card", "voucher"];
 
 const isPaymentTypeDisabled = computed(() => appointment.value.status !== 'completed');
 
 watch(() => props.appointmentDetails, (newAppointmentDetails, oldAppointmentDetails) => {
     console.log('Appointment details changed:', newAppointmentDetails, oldAppointmentDetails);
-    appointment.value = newAppointmentDetails;
+    appointment.value = JSON.parse(JSON.stringify(newAppointmentDetails));
 });
 
 
@@ -130,7 +131,7 @@ const switchDisplay = (display) => {
 
 onMounted(() => {
     console.log(props.appointmentDetails)
-    appointment.value = props.appointmentDetails;
+    appointment.value = JSON.parse(JSON.stringify(props.appointmentDetails));
 })
 
 

@@ -43,8 +43,7 @@
                             <input type="checkbox" class="toggle toggle-primary ml-2" v-model="customDateRange" />
                         </label>
                     </div>
-                    <button
-                        @click="fetchReport"
+                    <button @click="fetchReport"
                         class="flex items-center justify-center w-1/2 px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-blue-500 rounded-lg shrink-0 sm:w-auto gap-x-2 hover:bg-blue-600 dark:hover:bg-blue-500 dark:bg-blue-600">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-6 h-6">
@@ -61,7 +60,7 @@
                 <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
                         <div class="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
-                            <table class="table table-xs md:table-md">
+                            <table class="table table-xs md:table-md" id="report-table">
                                 <!-- head -->
                                 <thead>
                                     <tr>
@@ -75,10 +74,11 @@
                                 <tbody>
                                     <tr v-for="record in records" :key="record.id" class="hover">
                                         <th>#{{ record.id }}</th>
-                                        <td>{{new Date(record.appDate).toLocaleDateString('en-uk')}}</td>
-                                        <td>{{ record.treatments.map(treatment => treatment.treatmentName).join(', ') }}</td>
+                                        <td>{{ new Date(record.appDate).toLocaleDateString('en-uk') }}</td>
+                                        <td>{{ record.treatments.map(treatment => treatment.treatmentName).join(', ') }}
+                                        </td>
                                         <td class="capitalize">{{ record.paymentType }}</td>
-                                        <td>£{{record.totalPrice.toFixed(2)}}</td>
+                                        <td>£{{ record.totalPrice.toFixed(2) }}</td>
                                     </tr>
                                     <tr>
                                         <td><span class="font-bold">Number of Appointments:</span> {{ records.length }}</td>
@@ -95,15 +95,18 @@
                 </div>
             </div>
             <div class="mt-6 sm:flex items-center sm:items-end sm:justify-between">
-    
-                    <button
-                        class="flex items-center justify-center sm:ml-auto w-full px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-blue-500 rounded-lg shrink-0 sm:w-auto gap-x-2 hover:bg-blue-600 dark:hover:bg-blue-500 dark:bg-blue-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25" />
-</svg>
 
-                        <span>Download</span>
-                    </button>
+                <button @click="generateAndDownloadPDF"
+                v-if="downloadReport"
+                    class="flex items-center justify-center sm:ml-auto w-full px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-blue-500 rounded-lg shrink-0 sm:w-auto gap-x-2 hover:bg-blue-600 dark:hover:bg-blue-500 dark:bg-blue-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25" />
+                    </svg>
+
+                    <span>Download</span>
+                </button>
             </div>
         </section>
 
@@ -113,8 +116,11 @@
 <script setup>
 import { ref, watch, computed } from 'vue';
 import { fetchSummaryReport } from '../../composables/fetchSummaryReport';
+import html2pdf from 'html2pdf.js';
 
 const currentDate = new Date();
+
+const downloadReport = ref(false);
 
 const records = ref([]);
 
@@ -155,8 +161,20 @@ const reportParams = ref({
 
 const fetchReport = async () => {
     records.value = await fetchSummaryReport(reportParams.value)
-    console.log(records)
+    downloadReport.value = true;
 }
+
+const generateAndDownloadPDF = () => {
+    const element = document.getElementById('report-table'); // Add an ID to your table element
+
+    html2pdf(element, {
+        margin: 10,
+        filename: 'report.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    });
+};
 
 
 </script>

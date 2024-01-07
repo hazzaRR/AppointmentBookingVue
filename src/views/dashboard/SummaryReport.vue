@@ -1,5 +1,4 @@
 <template>
-    {{ reportParams.startDate }}
     <div class="grow my-6">
 
         <section class="container px-4 mx-auto w-full lg:w-3/4">
@@ -7,30 +6,30 @@
                 <div class="relative flex items-center mt-4 md:mt-0">
 
                     <div class="m-2" v-if="!customDateRange">
-                        <label class="block text-sm text-gray-700 dark:text-gray-200">Month</label>
+                        <label class="block text-xs text-gray-700 dark:text-gray-200">Month</label>
                         <input type="month" v-model="month"
-                            class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+                            class="block w-full px-4 py-3 md:text-sm text-xs text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
                     </div>
 
-                    <div class="flex" v-else>
-                        <div class="w-1/2 m-2">
+                    <div class="flex w-7/12 md:w-3/4" v-else>
+                        <div class="w-1/2">
 
-                            <label class="block text-sm text-gray-700 dark:text-gray-200">Start Date</label>
+                            <label class="block text-xs text-gray-700 dark:text-gray-200">Start Date</label>
                             <input type="date" v-model="reportParams.startDate"
-                                class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+                                class="block w-10/12 md:w-full px-4 py-3 md:text-sm text-xs text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
                         </div>
 
-                        <div class="w-1/2 m-2">
-                            <label class="block text-sm text-gray-700 dark:text-gray-200">End Date</label>
+                        <div class="w-1/2 md:ml-2">
+                            <label class="block text-xs text-gray-700 dark:text-gray-200">End Date</label>
                             <input type="date" v-model="reportParams.endDate"
-                                class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+                                class="block w-10/12 md:w-full px-4 py-3 md:text-sm text-xs text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
                         </div>
                     </div>
 
                     <div class="m-2">
-                        <label class="block text-sm text-gray-700 dark:text-gray-200">Payment Type</label>
+                        <label class="block text-xs text-gray-700 dark:text-gray-200">Payment Type</label>
                         <select v-model="reportParams.paymentType" id="status"
-                            class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300 capitalize">
+                            class="block w-full px-4 py-3 md:text-sm text-xs text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300 capitalize">
                             <option class="capitalize" v-for="paymentType in paymentTypes" :key="paymentType"
                                 :value="paymentType">{{ paymentType }}</option>
                         </select>
@@ -62,35 +61,31 @@
                 <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
                         <div class="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
-                            <table class="table">
+                            <table class="table table-xs md:table-md">
                                 <!-- head -->
                                 <thead>
                                     <tr>
                                         <th>App ID</th>
                                         <th>Date</th>
                                         <th>Services</th>
+                                        <th>Payement Type</th>
                                         <th>Price</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- row 1
-                                    <tr class="hover">
-                                        <th>1</th>
-                                        <td>Cy Ganderton</td>
-                                        <td>Quality Control Specialist</td>
-                                        <td>Blue</td>
-                                    </tr> -->
                                     <tr v-for="record in records" :key="record.id" class="hover">
                                         <th>#{{ record.id }}</th>
                                         <td>{{new Date(record.appDate).toLocaleDateString('en-uk')}}</td>
                                         <td>{{ record.treatments.map(treatment => treatment.treatmentName).join(', ') }}</td>
+                                        <td class="capitalize">{{ record.paymentType }}</td>
                                         <td>£{{record.totalPrice.toFixed(2)}}</td>
                                     </tr>
                                     <tr>
-                                        <td>Number of Appointments: {{ records.length }}</td>
+                                        <td><span class="font-bold">Number of Appointments:</span> {{ records.length }}</td>
                                         <td></td>
                                         <td></td>
-                                        <td>Total: £{{ totalPrice.toFixed(2) }}</td>
+                                        <td></td>
+                                        <td><span class="font-bold">Total:</span> £{{ totalPrice.toFixed(2) }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -98,6 +93,17 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="mt-6 sm:flex items-center sm:items-end sm:justify-between">
+    
+                    <button
+                        class="flex items-center justify-center sm:ml-auto w-full px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-blue-500 rounded-lg shrink-0 sm:w-auto gap-x-2 hover:bg-blue-600 dark:hover:bg-blue-500 dark:bg-blue-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25" />
+</svg>
+
+                        <span>Download</span>
+                    </button>
             </div>
         </section>
 

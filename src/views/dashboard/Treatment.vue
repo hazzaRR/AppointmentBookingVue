@@ -337,6 +337,7 @@
     const AddTreatment = async () => {
         await createTreatment(treatmentDetails.value);
         treatments.value = await fetchTreatments();
+        treatmentDetails.value = {treatmentName: null, price: null, durationMinutes: null};
     }
     
     </script>

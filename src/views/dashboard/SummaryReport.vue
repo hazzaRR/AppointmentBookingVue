@@ -61,14 +61,18 @@
                     <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
                         <div class="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
                             <table class="table table-xs md:table-md" id="report-table">
-                                <!-- head -->
+                                <caption class="text-lg font-semibold my-4">Summary Report from {{new Date(reportParams.startDate).toLocaleDateString('en-uk')}} - {{new Date(reportParams.endDate).toLocaleDateString('en-uk')}}</caption>
                                 <thead>
+                                    <!-- <tr>
+                                        <th><span class="font-bold">From: </span>{{new Date(reportParams.startDate).toLocaleDateString('en-uk')}}</th>
+                                        <th><span class="font-bold">To: </span>{{new Date(reportParams.endDate).toLocaleDateString('en-uk')}}</th>
+                                    </tr> -->
                                     <tr>
                                         <th>App ID</th>
                                         <th>Date</th>
                                         <th>Services</th>
                                         <th>Payement Type</th>
-                                        <th>Price</th>
+                                        <th>Amount</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -80,6 +84,8 @@
                                         <td class="capitalize">{{ record.paymentType }}</td>
                                         <td>£{{ record.totalPrice.toFixed(2) }}</td>
                                     </tr>
+                                </tbody>
+                                <tfoot>
                                     <tr>
                                         <td><span class="font-bold">Number of Appointments:</span> {{ records.length }}</td>
                                         <td></td>
@@ -87,8 +93,8 @@
                                         <td></td>
                                         <td><span class="font-bold">Total:</span> £{{ totalPrice.toFixed(2) }}</td>
                                     </tr>
-                                </tbody>
-                            </table>
+                                </tfoot>
+                                </table>
 
                         </div>
                     </div>
@@ -97,7 +103,7 @@
             <div class="mt-6 sm:flex items-center sm:items-end sm:justify-between">
 
                 <button @click="generateAndDownloadPDF"
-                v-if="downloadReport"
+                v-if="downloadReport && records.length > 0"
                     class="flex items-center justify-center sm:ml-auto w-full px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-blue-500 rounded-lg shrink-0 sm:w-auto gap-x-2 hover:bg-blue-600 dark:hover:bg-blue-500 dark:bg-blue-600">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
@@ -165,11 +171,11 @@ const fetchReport = async () => {
 }
 
 const generateAndDownloadPDF = () => {
-    const element = document.getElementById('report-table'); // Add an ID to your table element
+    const pdfContent = document.getElementById('report-table');
 
-    html2pdf(element, {
+    html2pdf(pdfContent, {
         margin: 10,
-        filename: 'report.pdf',
+        filename: 'summary-report.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2 },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },

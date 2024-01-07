@@ -66,26 +66,31 @@
                                 <!-- head -->
                                 <thead>
                                     <tr>
-                                        <th>Appointment Number</th>
+                                        <th>App ID</th>
                                         <th>Date</th>
                                         <th>Services</th>
                                         <th>Price</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- row 1 -->
+                                    <!-- row 1
                                     <tr class="hover">
                                         <th>1</th>
                                         <td>Cy Ganderton</td>
                                         <td>Quality Control Specialist</td>
                                         <td>Blue</td>
+                                    </tr> -->
+                                    <tr v-for="record in records" :key="record.id" class="hover">
+                                        <th>#{{ record.id }}</th>
+                                        <td>{{new Date(record.appDate).toLocaleDateString('en-uk')}}</td>
+                                        <td>{{ record.treatments.map(treatment => treatment.treatmentName).join(', ') }}</td>
+                                        <td>£{{record.totalPrice.toFixed(2)}}</td>
                                     </tr>
-                                    <!-- row 2 -->
-                                    <tr class="hover">
-                                        <th>2</th>
-                                        <td>Hart Hagerty</td>
-                                        <td>Desktop Support Technician</td>
-                                        <td>Purple</td>
+                                    <tr>
+                                        <td>Number of Appointments: {{ records.length }}</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>Total: £{{ totalPrice.toFixed(2) }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -100,10 +105,21 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { fetchSummaryReport } from '../../composables/fetchSummaryReport';
 
 const currentDate = new Date();
+
+const records = ref([]);
+
+const totalPrice = computed(() => {
+    let total = 0
+    for (let i = 0; i < records.value.length; i++) {
+        total += records.value[i].totalPrice;
+    }
+
+    return total;
+})
 
 const fetchStartAndEndDate = (selectedMonth) => {
     const [year, month] = selectedMonth.split('-');
@@ -132,7 +148,7 @@ const reportParams = ref({
 
 
 const fetchReport = async () => {
-    const records = await fetchSummaryReport(reportParams.value)
+    records.value = await fetchSummaryReport(reportParams.value)
     console.log(records)
 }
 

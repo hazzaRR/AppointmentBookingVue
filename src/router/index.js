@@ -3,6 +3,7 @@ import Index from '../views/Index.vue';
 import Dashboard from '../views/dashboard/Dashboard.vue';
 import Treatment from '../views/dashboard/Treatment.vue';
 import Client from '../views/dashboard/Client.vue';
+import SummaryReport from '../views/dashboard/SummaryReport.vue';
 import NotFoundPage from '../views/NotFoundPage.vue';
 import { useAuthStore } from '../stores/auth';
 import { jwtDecode } from "jwt-decode";
@@ -36,6 +37,14 @@ const routes = [
     path: '/dashboard/client',
     name: 'client',
     component: Client,
+    meta: { 
+      requiresAuth: true,
+    }
+  },
+  {
+    path: '/dashboard/summary-report',
+    name: 'sumarryReport',
+    component: SummaryReport,
     meta: { 
       requiresAuth: true,
     }

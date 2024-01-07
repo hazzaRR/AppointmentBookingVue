@@ -39,7 +39,6 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import EditAppointment from '../../components/EditAppointment.vue';
 import AddAppointment from '../../components/AddAppointment.vue';
-import AppointmentOptions from '../../components/AppointmentOptions.vue';
 import {fetchAppointments} from '../../composables/fetchAppointments';
 import {fetchClients} from '../../composables/fetchClients';
 
@@ -87,7 +86,6 @@ const calendarOptions = ref({
         addAppointmentModal.showModal();
       },
       eventDidMount: function (info) {
-        console.log(info.event)
       const eventStatus = info.event.extendedProps.status;
         if (eventStatus === 'completed') {
             info.el.style.backgroundColor = '#32de84';
@@ -124,6 +122,11 @@ onMounted(async () => {
 }
 
 });
+
+// const handleDateClick = (info) => {
+//   const clickedMonth = info.date.getMonth() + 1; // Months are zero-based, so add 1
+//   console.log('Clicked Month:', clickedMonth);
+// };
 
 const openAddModal = async () => {
     clients.value = await fetchClients();

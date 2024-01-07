@@ -22,6 +22,7 @@ const tools = [
 {name: "Manage Appointments", link: "/dashboard/"},
 {name: "Manage Treatments", link: "/dashboard/treatment"},
 {name: "Manage Clients", link: "/dashboard/client"},
+{name: "Summary Report", link: "/dashboard/summary-report"}
 ]
 
 </script>

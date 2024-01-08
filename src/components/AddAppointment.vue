@@ -83,7 +83,7 @@
 
 import {ref, watch, watchEffect} from 'vue';
 import TreatmentSelector from './TreatmentSelector.vue';
-import { createAppointment } from '../composables/createAppointment';
+import { createAppointment } from '../composables/appointment';
 
 const props = defineProps(['clients'])
 

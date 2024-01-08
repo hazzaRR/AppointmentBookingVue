@@ -39,8 +39,8 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import EditAppointment from '../../components/EditAppointment.vue';
 import AddAppointment from '../../components/AddAppointment.vue';
-import {fetchAppointments} from '../../composables/fetchAppointments';
-import {fetchClients} from '../../composables/fetchClients';
+import {fetchAppointments} from '../../composables/appointment';
+import {fetchClients} from '../../composables/client';
 
 const appointments = ref(null);
 const events = ref([]);

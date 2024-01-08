@@ -106,7 +106,7 @@
 
 import {onMounted, ref, watch, computed} from 'vue';
 import TreatmentSelector from './TreatmentSelector.vue';
-import { updateAppointment } from '../composables/updateAppointment';
+import { updateAppointment } from '../composables/appointment';
 
 
 const props = defineProps(['appointmentDetails']);

@@ -121,7 +121,7 @@
 
 <script setup>
 import { ref, watch, computed } from 'vue';
-import { fetchSummaryReport } from '../../composables/fetchSummaryReport';
+import { fetchSummaryReport } from '../../composables/summaryReport';
 import html2pdf from 'html2pdf.js';
 
 const currentDate = new Date();

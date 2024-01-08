@@ -33,8 +33,7 @@
 
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue';
-import {fetchTreatments} from '../composables/fetchTreatments';
-import {fetchAvailableTreatments} from '../composables/fetchTreatments';
+import {fetchTreatments,fetchAvailableTreatments} from '../composables/treatment';
 
 const emits = defineEmits(['update:selectedTreatments', 'confirmSelection']);
 const props = defineProps(['selectedTreatments'])

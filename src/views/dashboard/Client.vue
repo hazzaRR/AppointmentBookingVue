@@ -296,10 +296,7 @@
 <script setup>
 
 import { ref, onMounted, computed } from "vue";
-    import { fetchClients } from "../../composables/fetchClients";
-    import { deleteClient } from "../../composables/deleteClient";
-    import {editClient} from '../../composables/editClient';
-    import {createClient} from '../../composables/createClient';
+    import { fetchClients, deleteClient, editClient, createClient } from "../../composables/client";
     
     const clients = ref([]);
     const currentPage = ref(1);

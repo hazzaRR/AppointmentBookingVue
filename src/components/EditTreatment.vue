@@ -47,7 +47,7 @@
 
 <script setup>
 import {ref} from 'vue'
-import { editTreatment } from '../composables/editTreatment';
+import { editTreatment } from '../composables/treatment';
 
 
 const props = defineProps(['selectedTreatment'])

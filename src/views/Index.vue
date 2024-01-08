@@ -50,7 +50,6 @@
 <script setup>
 
 import { ref } from "vue";
-import { BASE_URL } from "../config"; //
 import {useAuthStore} from '../stores/auth';
 
 

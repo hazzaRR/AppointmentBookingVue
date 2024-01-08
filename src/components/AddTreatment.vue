@@ -44,7 +44,7 @@
 </template>
 
 <script setup>
-import {createTreatment} from '../composables/createTreatment';
+import {createTreatment} from '../composables/treatment';
 import {ref} from 'vue';
 
 const treatmentDetails = ref({treatmentName: null, price: null, durationMinutes: null});

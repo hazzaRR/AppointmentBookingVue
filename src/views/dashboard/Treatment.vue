@@ -192,8 +192,7 @@
     
     <script setup>
     import { ref, onMounted, computed } from "vue";
-    import { fetchTreatments } from "../../composables/fetchTreatments";
-    import { deleteTreatment } from "../../composables/deleteTreatment";
+    import { fetchTreatments, deleteTreatment } from "../../composables/treatment";
     import AddTreatment from '../../components/AddTreatment.vue'
     import EditTreatment from "../../components/EditTreatment.vue";
     
@@ -226,7 +225,6 @@
         selectedTreatment.value = treatment;
         switchDisplay("deleteDisplay")
         treatmentModal.showModal();
-        // deleteTreatmentModal.showModal();
     };
     
     const DeleteTreatment = async () => {

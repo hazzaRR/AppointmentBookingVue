@@ -1,7 +1,7 @@
 <template>
     <div class="grow my-6">
 
-        <dialog id="addAppointmentModal" class="modal modal-bottom sm:modal-middle">
+        <dialog id="AppointmentModal" class="modal modal-bottom sm:modal-middle">
             <AddAppointment class="modal-box" v-if="modalDisplay === 'addFormDisplay'" :clients="clients" />
             <!-- <AppointmentOptions class="modal-box" v-if="modalDisplay === 'optionsDisplay'" :appointmentDetails="selectedAppointment" /> -->
             <EditAppointment class="modal-box" v-else-if="modalDisplay === 'editFormDisplay'" :appointmentDetails="selectedAppointment"/>
@@ -83,7 +83,7 @@ const calendarOptions = ref({
         selectedAppointment.value = appointments.value.filter(appointment => String(appointment['id']) === String(info.event.id))[0]
         console.log(selectedAppointment.value)
         switchDisplay('editFormDisplay');
-        addAppointmentModal.showModal();
+        AppointmentModal.showModal();
       },
       eventDidMount: function (info) {
       const eventStatus = info.event.extendedProps.status;
@@ -131,7 +131,7 @@ onMounted(async () => {
 const openAddModal = async () => {
     clients.value = await fetchClients();
     switchDisplay('addFormDisplay');
-    addAppointmentModal.showModal();
+    AppointmentModal.showModal();
 };
 
 

@@ -15,7 +15,7 @@ export const editTreatment = async (treatment) => {
     
     if (response.status === 200) {
 
-        console.log("treatment successfully deleted");
+        console.log("treatment successfully updated");
     }
 
     else if (response.status === 401) {
@@ -25,6 +25,29 @@ export const editTreatment = async (treatment) => {
     else {
     }
 
+}
 
+export const archiveTreatment = async (treatment) => {
+    const auth = useAuthStore();
+
+    const response = await fetch(`${BASE_URL}/api/archiveTreatment/${treatment.id}?archive=${archive}`, {
+        method: "PUT",
+        headers: {
+            "Authorization": `Bearer ${auth.token}`,
+            'Content-Type': 'application/json'
+        }}
+    )
+    if (response.status === 200) {
+
+        console.log("treatment updated")
+        alert("treatment details successfully updated");
+    }
+
+    else if (response.status === 401) {
+        console.log(await response.text());
+      }
+
+    else {
+    }
 
 }

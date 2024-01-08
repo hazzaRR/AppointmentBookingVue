@@ -14,8 +14,8 @@ export const createTreatment = async (treatmentDetails) => {
     });
     
     if (response.status === 200) {
-
-        console.log("treatment successfully created");
+        alert("treatment successfully created");
+        location.reload();
     }
 
     else if (response.status === 401) {

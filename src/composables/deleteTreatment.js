@@ -13,7 +13,7 @@ export const deleteTreatment = async (id) => {
     
     if (response.status === 200) {
 
-        console.log("treatment successfully deleted");
+        alert("treatment successfully deleted");
     }
 
     else if (response.status === 401) {

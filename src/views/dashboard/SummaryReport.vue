@@ -61,11 +61,11 @@
                     <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
                         <div class="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
                             <table class="table table-xs md:table-md" id="report-table">
-                                <caption class="text-lg font-semibold my-4">Summary Report from {{new Date(reportParams.startDate).toLocaleDateString('en-uk')}} - {{new Date(reportParams.endDate).toLocaleDateString('en-uk')}}</caption>
+                                <caption class="text-lg font-semibold my-4">Summary Report from {{new Date(startDate).toLocaleDateString('en-uk')}} - {{new Date(endDate).toLocaleDateString('en-uk')}}</caption>
                                 <thead>
                                     <!-- <tr>
-                                        <th><span class="font-bold">From: </span>{{new Date(reportParams.startDate).toLocaleDateString('en-uk')}}</th>
-                                        <th><span class="font-bold">To: </span>{{new Date(reportParams.endDate).toLocaleDateString('en-uk')}}</th>
+                                        <th><span class="font-bold">From: </span>{{new Date(startDate).toLocaleDateString('en-uk')}}</th>
+                                        <th><span class="font-bold">To: </span>{{new Date(endDate).toLocaleDateString('en-uk')}}</th>
                                     </tr> -->
                                     <tr>
                                         <th>App ID</th>
@@ -125,7 +125,6 @@ import { fetchSummaryReport } from '../../composables/fetchSummaryReport';
 import html2pdf from 'html2pdf.js';
 
 const currentDate = new Date();
-
 const downloadReport = ref(false);
 
 const records = ref([]);
@@ -164,10 +163,15 @@ const reportParams = ref({
     paymentType: 'all',
 })
 
+let startDate = reportParams.value.startDate;
+let endDate = reportParams.value.endDate;
+
 
 const fetchReport = async () => {
     records.value = await fetchSummaryReport(reportParams.value)
     downloadReport.value = true;
+    startDate = reportParams.value.startDate;
+    endDate = reportParams.value.endDate;
 }
 
 const generateAndDownloadPDF = () => {

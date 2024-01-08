@@ -19,6 +19,26 @@ export const fetchTreatments = async () => {
         return data;
     };
 
+}
+
+export const fetchAvailableTreatments = async () => {
+    const auth = useAuthStore();
+
+    const response = await fetch(`${BASE_URL}/api/treatment/available`, {
+        headers: {
+            "Authorization": `Bearer ${auth.token}`
+        }
+    });
+    
+    
+    if (response.status === 200) {
+        const data = await response.json();
+
+        console.log(data)
+    
+        return data;
+    };
+
 
 
 }

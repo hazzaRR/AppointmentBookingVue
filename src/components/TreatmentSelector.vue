@@ -34,6 +34,7 @@
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue';
 import {fetchTreatments} from '../composables/fetchTreatments';
+import {fetchAvailableTreatments} from '../composables/fetchTreatments';
 
 const emits = defineEmits(['update:selectedTreatments', 'confirmSelection']);
 const props = defineProps(['selectedTreatments'])
@@ -45,7 +46,7 @@ const isEmpty = computed(() => availableTreatments.value.length === 0);
 
 
 onMounted(async () => {
-    availableTreatments.value = await fetchTreatments();
+    availableTreatments.value = await fetchAvailableTreatments();
 })
 
 const selectTreatment = (selectedTreatment) => {

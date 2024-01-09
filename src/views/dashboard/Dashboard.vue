@@ -77,7 +77,6 @@ const fetchAppointmentsBetweenRange = async (info) => {
               status: appointment.status
             }
           }));
-          console.log(events)
           return events;
         }
   catch (error) {
@@ -88,20 +87,20 @@ const fetchAppointmentsBetweenRange = async (info) => {
 
 const calendarOptions = ref({
   plugins: [dayGridPlugin, interactionPlugin, timeGridPlugin, listPlugin],
-  initialView: 'timeGridWeek',
+  initialView: 'dayGridMonth',
   firstDay: 1,
   slotMinTime: '07:00',
   slotMaxTime: '21:00',
   slotDuration: '00:15',
   nowIndicator: true,
   headerToolbar: {
-    left: 'title',
+    left: 'timeGridWeek,timeGridDay,listWeek title',
     // center: 'title',
+    // right: 'prev,next'
     right: 'prev,next'
-    // right: 'timeGridWeek,timeGridDay,listYear,listWeek'
   },
   footerToolbar: {
-    right: 'dayGridMonth,timeGridWeek,timeGridDay,listDay,listWeek'
+    right: 'dayGridMonth,timeGridWeek,timeGridDay,listDay,listWeek,listMonth'
     // right: 'timeGridWeek,timeGridDay,listYear,listWeek'
   },
   default: 'standard',

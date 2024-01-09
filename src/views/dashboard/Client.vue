@@ -1,7 +1,11 @@
 <template>
     <div class="grow my-6">
-    <dialog id="deleteClientModal" class="modal modal-bottom sm:modal-middle">
-      <form method="dialog" class="modal-box">
+
+    <dialog id="clientModal" class="modal modal-bottom sm:modal-middle">
+        <AddClient class="modal-box" v-if="modalDisplay === 'addDisplay'" />
+        <EditClient class="modal-box" v-if="modalDisplay === 'editDisplay'" :selectedClient="selectedClient" />
+
+                <form v-else-if="modalDisplay === 'deleteDisplay'" method="dialog" class="modal-box">
                     <div>
                         <div class="flex items-center justify-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -30,114 +34,6 @@
                         </div>
                     </div>
             </form>
-            <form method="dialog" class="modal-backdrop">
-    <button>close</button>
-  </form>
-    </dialog>
-
-    <dialog id="editClientModal" class="modal modal-bottom sm:modal-middle">
-      <form method="dialog" class="modal-box">
-                    <h3 class="text-lg font-medium leading-6 text-gray-800 capitalize dark:text-white" id="modal-title">
-                        Update Client information
-                    </h3>
-
-                        <label for="firstname" class="text-sm text-gray-700 dark:text-gray-200">
-                            Firstname
-                        </label>
-
-                        <label class="block mt-3" for="firstname">
-                            <input type="text" name="firstname" id="trefirstnameatment" placeholder="pedicure..." v-model="selectedClient.firstname" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
-                        </label>
-
-                        <label for="surname" class="text-sm text-gray-700 dark:text-gray-200">
-                            Surname
-                        </label>
-
-                        <label class="block mt-3" for="surname">
-                            <input type="text" name="surname" id="surname" placeholder="£25.00" v-model="selectedClient.surname" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
-                        </label>
-
-                        <label for="email" class="text-sm text-gray-700 dark:text-gray-200">
-                            email
-                        </label>
-
-                        <label class="block mt-3" for="email">
-                            <input type="email" name="email" id="email" placeholder="30" v-model="selectedClient.email" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
-                        </label>
-
-                        <label for="telephone" class="text-sm text-gray-700 dark:text-gray-200">
-                            Telephone
-                        </label>
-
-                        <label class="block mt-3" for="telephone">
-                            <input type="text" name="telephone" id="telephone" placeholder="30" v-model="selectedClient.telephone" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
-                        </label>
-
-
-                        <div class="mt-4 sm:flex sm:items-center sm:-mx-2">
-                            <button class="w-full px-4 py-2 text-sm font-medium tracking-wide text-gray-700 capitalize transition-colors duration-300 transform border border-gray-200 rounded-md sm:w-1/2 sm:mx-2 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-40">
-                                Cancel
-                            </button>
-
-                            <button @click="EditClient" class="w-full px-4 py-2 mt-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md sm:mt-0 sm:w-1/2 sm:mx-2 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
-                                Update
-                            </button>
-                        </div>
-      </form>
-        <form method="dialog" class="modal-backdrop">
-            <button>close</button>
-        </form>
-    </dialog>
-
-    <dialog id="addClientModal" class="modal modal-bottom sm:modal-middle">
-      <form method="dialog" class="modal-box">
-                    <h3 class="text-lg font-medium leading-6 text-gray-800 capitalize dark:text-white" id="modal-title">
-                        Create Client
-                    </h3>
-
-                        <label for="firstname" class="text-sm text-gray-700 dark:text-gray-200">
-                            Firstname
-                        </label>
-
-                        <label class="block mt-3" for="firstname">
-                            <input type="text" name="firstname" id="trefirstnameatment" placeholder="John" v-model="clientDetails.firstname" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
-                        </label>
-
-                        <label for="surname" class="text-sm text-gray-700 dark:text-gray-200">
-                            Surname
-                        </label>
-
-                        <label class="block mt-3" for="price">
-                            <input type="text" name="surname" id="surname" placeholder="Doe" v-model="clientDetails.surname" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
-                        </label>
-
-                        <label for="email" class="text-sm text-gray-700 dark:text-gray-200">
-                            Email
-                        </label>
-
-                        <label class="block mt-3" for="email">
-                            <input type="email" name="email" id="email" placeholder="example@email.com" v-model="clientDetails.email" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
-                        </label>
-
-                        <label for="telephone" class="text-sm text-gray-700 dark:text-gray-200">
-                            Telephone
-                        </label>
-
-                        <label class="block mt-3" for="telephone">
-                            <input type="text" name="telephone" id="telephone" placeholder="07777777777" v-model="clientDetails.telephone" class="block w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
-                        </label>
-
-
-                        <div class="mt-4 sm:flex sm:items-center sm:-mx-2">
-                            <button class="w-full px-4 py-2 text-sm font-medium tracking-wide text-gray-700 capitalize transition-colors duration-300 transform border border-gray-200 rounded-md sm:w-1/2 sm:mx-2 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-40">
-                                Cancel
-                            </button>
-
-                            <button @click="AddClient" class="w-full px-4 py-2 mt-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md sm:mt-0 sm:w-1/2 sm:mx-2 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
-                                Create
-                            </button>
-                        </div>
-      </form>
         <form method="dialog" class="modal-backdrop">
             <button>close</button>
         </form>
@@ -155,6 +51,7 @@
                 </span>
 
                 <input type="text" placeholder="Search"
+                v-model="searchInput"
                     class="block w-full py-1.5 pr-5 text-gray-700 bg-white border border-gray-200 rounded-lg md:w-80 placeholder-gray-400/70 pl-11 rtl:pr-11 rtl:pl-5 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" />
             </div>
             <div class="flex items-center mt-4 gap-x-3">
@@ -296,55 +193,73 @@
 <script setup>
 
 import { ref, onMounted, computed } from "vue";
-    import { fetchClients, deleteClient, editClient, createClient } from "../../composables/client";
-    
-    const clients = ref([]);
-    const currentPage = ref(1);
-    const selectedClient = ref({id: null, firstname: null, surname: null, email: null, telephone: null});
-    const clientDetails = ref({firstname: null, surname: null, email: null, telephone: null});
-    const clientsPerPage = 10;
-    
-    const totalNumberOfPages = computed(() => {
-        return Math.ceil(clients.value.length / clientsPerPage);
-    });
-    
-    const displayedclients = computed(() => {
-        const start = (currentPage.value - 1) * clientsPerPage;
-          const end = start + clientsPerPage;
-          return clients.value.slice(start, end);
-    });
-    
-    onMounted(async () => {
-        clients.value = await fetchClients();
-    });
-    
-    const openDeleteModal = (client) => {
-        selectedClient.value = client;
-        deleteClientModal.showModal();
-    };
-    
-    const DeleteClient = async () => {
-        await deleteClient(selectedClient.value.id);
-        clients.value = clients.value.filter(client => client['id']!== selectedClient.value.id);
-    }
-    
-    const openEditModal = (client) => {
-        selectedClient.value = client;
-        editClientModal.showModal();
-    };
-    
-    const EditClient = async () => {
-        await editClient(selectedClient.value);
-    };
+import { fetchClients, deleteClient } from "../../composables/client";
+import AddClient from "../../components/AddClient.vue";
+import EditClient from "../../components/EditClient.vue";
 
-    const openAddModal = () => {
-        addClientModal.showModal();
-    };
 
-    const AddClient = async () => {
-        await createClient(clientDetails.value);
-        clients.value = await fetchClients();
-    };
+const searchInput = ref('')
+
+const clients = ref([]);
+const currentPage = ref(1);
+const selectedClient = ref({id: null, firstname: null, surname: null, email: null, telephone: null});
+const clientsPerPage = 10;
+
+const modalDisplay = ref('addDisplay');
+
+const switchDisplay = (display) => {
+modalDisplay.value = display;
+};
+
+const totalNumberOfPages = computed(() => {
+    return Math.ceil(filteredClients.value.length / clientsPerPage);
+});
+
+const filteredClients = computed (() => {
+
+    return clients.value.filter(client =>
+    client.firstname.toLowerCase().includes(searchInput.value.toLowerCase()) ||
+    client.surname.toLowerCase().includes(searchInput.value.toLowerCase()) ||
+    client.email.toLowerCase().includes(searchInput.value.toLowerCase()) ||
+    client.telephone.includes(searchInput.value)
+);
+
+})
+
+const displayedclients = computed(() => {
+    const start = (currentPage.value - 1) * clientsPerPage;
+        const end = start + clientsPerPage;
+
+        return filteredClients.value.slice(start, end);
+        // return clients.value.slice(start, end);
+});
+
+onMounted(async () => {
+    clients.value = await fetchClients();
+});
+
+const openDeleteModal = (client) => {
+    selectedClient.value = client;
+    switchDisplay("deleteDisplay")
+    clientModal.showModal();
+};
+
+const DeleteClient = async () => {
+    await deleteClient(selectedClient.value.id);
+    clients.value = clients.value.filter(client => client['id']!== selectedClient.value.id);
+}
+
+const openEditModal = (client) => {
+    selectedClient.value = client;
+    switchDisplay("editDisplay");
+    clientModal.showModal();
+};
+
+
+const openAddModal = () => {
+    switchDisplay("addDisplay")
+    clientModal.showModal();
+};
 
 
 </script>

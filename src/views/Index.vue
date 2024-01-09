@@ -51,7 +51,15 @@
 
 import { ref } from "vue";
 import {useAuthStore} from '../stores/auth';
+import router from "../router/index"
 
+
+const auth = useAuthStore();
+
+
+if (auth.username && auth.token) {
+    router.push("/dashboard");
+}
 
 
 

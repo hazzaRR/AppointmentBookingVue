@@ -20,8 +20,8 @@ export const createAppointment = async (appointmentDetails) => {
     }
 
     else if (response.status === 401) {
-        console.log(await response.text());
-      }
+        auth.logout();
+    }
 
     else {
     }
@@ -41,7 +41,10 @@ export const fetchAppointments = async () => {
     if (response.status === 200) {
         const data = await response.json();    
         return data;
-    };
+    }
+    else if (response.status === 401) {
+        auth.logout();
+    }
 
 }
 
@@ -57,7 +60,10 @@ export const fetchAppointmentsBetweenDateRange = async (info) => {
     if (response.status === 200) {
         const data = await response.json();   
         return data;
-    };
+    }
+    else if (response.status === 401) {
+        auth.logout();
+    }
 
 }
 
@@ -80,8 +86,8 @@ export const updateAppointment = async (appointment) => {
     }
 
     else if (response.status === 401) {
-        console.log(await response.text());
-      }
+        auth.logout();
+    }
 
     else {
     }

@@ -51,6 +51,7 @@
                     </span>
     
                     <input type="text" placeholder="Search"
+                        v-model="searchInput"
                         class="block w-full py-1.5 pr-5 text-gray-700 bg-white border border-gray-200 rounded-lg md:w-80 placeholder-gray-400/70 pl-11 rtl:pr-11 rtl:pl-5 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" />
                 </div>
                 <div class="flex items-center mt-4 gap-x-3">
@@ -196,6 +197,8 @@
     import AddTreatment from '../../components/AddTreatment.vue'
     import EditTreatment from "../../components/EditTreatment.vue";
     
+
+    const searchInput = ref('')
     const treatments = ref([]);
     const currentPage = ref(1);
     const selectedTreatment = ref({id: null, treatmentName: null, price: null, durationMinutes: null});
@@ -206,15 +209,23 @@
     const switchDisplay = (display) => {
     modalDisplay.value = display;
     };
+
+    const filteredTreatments = computed (() => {
+    currentPage.value = 1;
+    return treatments.value.filter(client =>
+    client.treatmentName.toLowerCase().includes(searchInput.value.toLowerCase())
+);
+
+})
     
     const totalNumberOfPages = computed(() => {
-        return Math.ceil(treatments.value.length / treatmentsPerPage);
+        return Math.ceil(filteredTreatments.value.length / treatmentsPerPage);
     });
     
     const displayedTreatments = computed(() => {
         const start = (currentPage.value - 1) * treatmentsPerPage;
           const end = start + treatmentsPerPage;
-          return treatments.value.slice(start, end);
+          return filteredTreatments.value.slice(start, end);
     });
     
     onMounted(async () => {

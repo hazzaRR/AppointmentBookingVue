@@ -23,8 +23,10 @@ export const fetchSummaryReport = async (reportParams) => {
     if (response.status === 200) {
         const data = await response.json();    
         return data;
-    };
-
-
+    }
+    
+    else if (response.status === 401) {
+        auth.logout();
+    }
 
 }

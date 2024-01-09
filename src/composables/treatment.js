@@ -19,8 +19,8 @@ export const createTreatment = async (treatmentDetails) => {
     }
 
     else if (response.status === 401) {
-        console.log(await response.text());
-      }
+        auth.logout();
+    }
 
     else {
     }
@@ -42,9 +42,13 @@ export const deleteTreatment = async (id) => {
         alert("treatment successfully deleted");
     }
 
+    else if (response.status === 409) {
+        alert("Treatment cannot be deleted because it has been used for previous appointments, please archive the treatment instead")
+    }
+
     else if (response.status === 401) {
-        console.log(await response.text());
-      }
+        auth.logout();
+    }
 
     else {
     }
@@ -68,8 +72,8 @@ export const editTreatment = async (treatment) => {
     }
 
     else if (response.status === 401) {
-        console.log(await response.text());
-      }
+        auth.logout();
+    }
 
     else {
     }
@@ -93,8 +97,8 @@ export const archiveTreatment = async (treatment) => {
     }
 
     else if (response.status === 401) {
-        console.log(await response.text());
-      }
+        auth.logout();
+    }
 
     else {
     }
@@ -115,7 +119,10 @@ export const fetchTreatments = async () => {
         const data = await response.json();
     
         return data;
-    };
+    }
+    else if (response.status === 401) {
+        auth.logout();
+    }
 
 }
 
@@ -128,11 +135,13 @@ export const fetchAvailableTreatments = async () => {
         }
     });
     
-    
     if (response.status === 200) {
         const data = await response.json();
 
         return data;
-    };
+    }
+    else if (response.status === 401) {
+        auth.logout();
+    }
 
 }

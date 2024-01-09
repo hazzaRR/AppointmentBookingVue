@@ -14,13 +14,13 @@ export const createClient = async (clientDetails) => {
     });
     
     if (response.status === 200) {
-
         alert("client successfully created");
+        location.reload()
     }
 
     else if (response.status === 401) {
-        console.log(await response.text());
-      }
+        auth.logout();
+    }
 
     else {
     }
@@ -43,8 +43,8 @@ export const deleteClient = async (id) => {
     }
 
     else if (response.status === 401) {
-        console.log(await response.text());
-      }
+        auth.logout();
+    }
 
     else {
     }
@@ -69,8 +69,8 @@ export const editClient = async (client) => {
     }
 
     else if (response.status === 401) {
-        console.log(await response.text());
-      }
+        auth.logout();
+    }
 
     else {
     }
@@ -91,8 +91,10 @@ export const fetchClients = async () => {
         const data = await response.json();
     
         return data;
-    };
+    }
 
-
+    else if (response.status === 401) {
+        auth.logout();
+    }
 
 }

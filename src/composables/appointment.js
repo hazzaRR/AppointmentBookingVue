@@ -45,6 +45,22 @@ export const fetchAppointments = async () => {
 
 }
 
+export const fetchAppointmentsBetweenDateRange = async (info) => {
+    const auth = useAuthStore();
+
+    const response = await fetch(`${BASE_URL}/api/appointment/appointment-between?start=${info.startStr.split('T')[0]}&end=${info.endStr.split('T')[0]}`, {
+        headers: {
+            "Authorization": `Bearer ${auth.token}`
+        }
+    });
+    
+    if (response.status === 200) {
+        const data = await response.json();   
+        return data;
+    };
+
+}
+
 export const updateAppointment = async (appointment) => {
     const auth = useAuthStore();
 

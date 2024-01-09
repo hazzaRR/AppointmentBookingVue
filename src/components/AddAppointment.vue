@@ -108,8 +108,6 @@ const handleTreatmentChange = () => {
     const newHours = String(newDateTime.getHours()).padStart(2, '0');
     const newMinutes = String(newDateTime.getMinutes()).padStart(2, '0');
 
-    console.log(newDateTime)
-
     createAppointmentDetails.value.endTime = `${newHours}:${newMinutes}`;
     createAppointmentDetails.value.totalPrice = totalPrice;
 }

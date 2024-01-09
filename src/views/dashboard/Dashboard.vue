@@ -1,16 +1,5 @@
 <template>
   <div class="grow my-6">
-
-          <button @click="dateFinder"
-            class="flex items-center justify-center w-1/2 px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-blue-500 rounded-lg shrink-0 sm:w-auto gap-x-2 hover:bg-blue-600 dark:hover:bg-blue-500 dark:bg-blue-600">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-              stroke="currentColor" class="w-6 h-6">
-              <path stroke-linecap="round" stroke-linejoin="round"
-                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-            </svg>
-            <span>Fetch new Appointments</span>
-          </button>
-
     <dialog id="AppointmentModal" class="modal modal-bottom sm:modal-middle">
       <AddAppointment class="modal-box" v-if="modalDisplay === 'addFormDisplay'" :clients="clients" />
       <!-- <AppointmentOptions class="modal-box" v-if="modalDisplay === 'optionsDisplay'" :appointmentDetails="selectedAppointment" /> -->
@@ -60,12 +49,11 @@ import listPlugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction'
 import EditAppointment from '../../components/EditAppointment.vue';
 import AddAppointment from '../../components/AddAppointment.vue';
-import { fetchAppointments } from '../../composables/appointment';
+import { fetchAppointmentsBetweenDateRange} from '../../composables/appointment';
 import { fetchClients } from '../../composables/client';
 
 const calendarInstance = ref(null);
 const appointments = ref(null);
-const events = ref([]);
 const clients = ref([]);
 const selectedAppointment = ref(null);
 
@@ -75,7 +63,28 @@ const switchDisplay = (display) => {
   modalDisplay.value = display;
 };
 
+const fetchAppointmentsBetweenRange = async (info) => {
 
+  try {
+    appointments.value = await fetchAppointmentsBetweenDateRange(info);
+
+    const events = appointments.value.map(appointment => ({
+            id: appointment.id,
+            title: `${appointment.client.firstname} ${appointment.client.surname}`,
+            start: `${appointment.appDate}T${appointment.startTime}`,
+            end: `${appointment.appDate}T${appointment.endTime}`,
+            extendedProps: {
+              status: appointment.status
+            }
+          }));
+          console.log(events)
+          return events;
+        }
+  catch (error) {
+    console.log(error)
+    throw error;
+  }
+}
 
 const calendarOptions = ref({
   plugins: [dayGridPlugin, interactionPlugin, timeGridPlugin, listPlugin],
@@ -96,7 +105,7 @@ const calendarOptions = ref({
     // right: 'timeGridWeek,timeGridDay,listYear,listWeek'
   },
   default: 'standard',
-  events: events.value,
+  events: (info) => {return fetchAppointmentsBetweenRange(info)},
   eventTimeFormat: {
     hour: 'numeric',
     minute: '2-digit',
@@ -132,33 +141,6 @@ const calendarOptions = ref({
   }
 });
 
-onMounted(async () => {
-  appointments.value = await fetchAppointments();
-
-  for (let i = 0; i < appointments.value.length; i++) {
-
-    const event = {
-      id: appointments.value[i].id,
-      title: `${appointments.value[i].client.firstname} ${appointments.value[i].client.surname}`,
-      start: `${appointments.value[i].appDate}T${appointments.value[i].startTime}`,
-      end: `${appointments.value[i].appDate}T${appointments.value[i].endTime}`,
-      extendedProps: {
-        status: appointments.value[i].status
-      }
-    }
-    // if (!events.value.has(event)) {
-
-    events.value.push(event);
-  }
-
-
-  calendarInstance.value = calendarInstance.value.getApi()
-
-  console.log(new Date(parseInt(calendarInstance.value.getDate().getFullYear()), 0, 1).toISOString().split('T')[0])
-  console.log(new Date(parseInt(calendarInstance.value.getDate().getFullYear()), 11, 1).toISOString().split('T')[0])
-
-
-});
 
 const openAddModal = async () => {
   clients.value = await fetchClients();
@@ -166,14 +148,6 @@ const openAddModal = async () => {
   AppointmentModal.showModal();
 };
 
-
-const dateFinder = () => {
-  // console.log(calendarInstance.value.getDate().getFullYear())
-  //   console.log(new Date(parseInt(calendarInstance.value.getDate().getFullYear()), 0, 1).toISOString().split('T')[0])
-  // console.log(new Date(parseInt(calendarInstance.value.getDate().getFullYear()), 11, 1).toISOString().split('T')[0])
-  console.log(calendarInstance.value.currentData.dateProfile.currentRange);
-  // console.log(calendarInstance.value.getCurrentRange());
-}
 
 </script>
 
